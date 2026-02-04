@@ -8,7 +8,7 @@ import './Layout.css';
 
 const Layout = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const location = useLocation();
+  // const location = useLocation(); // Unused
 
   useEffect(() => {
     // Fake loading for 3 seconds on initial mount
