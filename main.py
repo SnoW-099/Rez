@@ -12,12 +12,25 @@ cargar_banco()
 # Agregar comandos al bot
 bot.remove_command('help')  # Eliminar el comando de ayuda por defecto si es necesario
 
-# Añadir los comandos manualmente
 @bot.command()
 async def balance(ctx):
-    usuario = str(ctx.author.id)
-    usuario_balance = banco.get(usuario, 0)
-    await ctx.send(f"hola {ctx.author.name}, tu saldo en el banco es de {usuario_balance} en el servidor")
+    usuario_id = str(ctx.author.id)
+    saldo = banco.get(usuario_id, 0)
+    embed = discord.Embed(
+        title=f"🏦 Banco de Runas",
+        description=f"Consulta de saldo para **{ctx.author.name}**",
+        color=0x0099ff 
+    )
+
+    # Añadimos detalles
+    embed.add_field(name="Saldo Actual", value=f"💰 {saldo} monedas", inline=False)
+    embed.set_thumbnail(url=ctx.author.display_avatar.url) # Pone tu foto de perfil pequeña
+    embed.set_footer(text="Rez Bot - El mago de las runas")
+
+    await ctx.send(embed=embed) 
+
+
+
 
 
 @bot.command()
@@ -27,13 +40,24 @@ async def trabajar(ctx):
     usuario = str(ctx.author.id)
     usuario_balance = banco.get(usuario, 0)
     banco[usuario] = usuario_balance + numero
-    await ctx.send(f"hola {ctx.author.name}, tu trabajo te ha dado {numero} en el servidor")
 
-    if numero > 1000:
-        await ctx.send("¡Felicidades! hoy te levantaste con suerte!!")
+    if numero >= 1000:
+        embed = discord.Embed(
+            title="¡Gran Trabajo!",
+            description=f"¡Increíble {ctx.author.name}! hoy te levantaste con el pie derecho y has ganado {numero} monedas)",
+            color=0x2ecc71
+        )
+        await ctx.send(embed=embed)
+
     else:
-        await ctx.send("bueno, dentro de lo que cabe no esta tan mal jajaja!!")
-    guardar_banco()
+        embed = discord.Embed(
+            title="Buen Trabajo",
+            description=f"¡Bien hecho {ctx.author.name}! hoy has ganado {numero} sigue trabajando y conseguiras saldos mejores!!!)",
+            color=0xe74c3c
+        )
+    
+        await ctx.send(embed=embed)
+        guardar_banco()
 
 
 @bot.command()
@@ -77,7 +101,7 @@ async def donar(ctx, receptor: discord.Member, cantidad: str):  # Recibimos la c
             banco[donante_id] = donante_balance - cantidad
             receptor_balance = banco.get(receptor_id, 0)
             banco[receptor_id] = receptor_balance + cantidad
-            await ctx.send(f"Gracias por completar la transferenecia de {cantidad} moenad a {receptor.name} en el servidor😊")
+            await ctx.send(f"Gracias por completar la transferenecia de {cantidad} monedas a {receptor.name} en el servidor😊")
     except ValueError:
         await ctx.send("¡Oye! Tienes que poner un número de monedas válido.")
 
@@ -91,7 +115,40 @@ async def on_command_error(ctx, error):
         await ctx.send(f"¡Cálmate! Inténtalo de nuevo en {round(error.retry_after, 2)} segundos.")
 
 
+@bot.command()
+async def ranking(ctx):
+    # Ordenamos el banco de mayor a menor saldo
+    ranking_usuario = sorted(banco.items(), key=lambda x: x[1], reverse=True)
+    mensaje_ranking = "🏆 **Top 5 usuarios más ricos en el servidor** 🏆"
+
+    embed = discord.Embed(
+        title="🏦 Los 5 mas ricos del servidor",
+        description=mensaje_ranking,
+        color=0x0099ff
+    )
+
+    for i, (id_usuario, saldo) in enumerate(ranking_usuario[:5], start=1):
+        try:
+            usuario = await bot.fetch_user(int(id_usuario))
+            nombre_usuario = usuario.name
+        except:
+            nombre_usuario = "Viajero desconocido"
+
+        embed.add_field(
+            name=f"{i}. {nombre_usuario}",
+            value=f"💰 {saldo} monedas",
+            inline=False
+        )
+
+    await ctx.send(embed=embed)
+
+
 # Evento cuando el bot esté listo
 @bot.event
 async def on_ready():
     print(f'{bot.user} ha iniciado sesión en Discord!')
+
+
+# --- ARRANQUE DEL BOT ---
+
+bot.run("MTQ2NTEyMDI2ODk5NjQ0NDM3NQ.GeKjBH.8iRxC0gilS-qzsHgm6An-T2D8wHjhBNeJZKY6o")
