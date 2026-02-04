@@ -1,49 +1,47 @@
 # Rez 🤖 | Security & Economy System
 
-Rez es un bot de Discord de alto rendimiento diseñado para equilibrar la gestión de comunidad con un sistema económico competitivo. Enfocado en la **seriedad, eficiencia y seguridad**.
+Rez is a high-performance Discord bot designed to balance community management with a competitive economic framework. Built for **reliability, efficiency, and security**.
 
-> 🛡️ **Estado del Proyecto**: Beta Activa. Rez ya cuenta con persistencia de datos y módulos de administración independientes.
+> 🛡️ **Project Status**: Active Beta. Rez now features full data persistence and independent administrative modules.
 
-## 🛠️ Arquitectura del Proyecto
+## 🛠️ Project Architecture
 
-El bot utiliza una estructura modular para garantizar la estabilidad y facilitar el mantenimiento:
+The bot utilizes a modular structure to ensure stability and maintainability:
 
-* `main.py`: Núcleo de ejecución y orquestador de módulos.
-* `config.py`: Gestión de Intents y configuración de API.
-* `moderation.py`: Sistema de seguridad, filtros y control de usuarios.
-* `commands.py`: Lógica económica y utilidades.
-* `bank_system.py`: Motor de base de datos JSON y persistencia.
+* `main.py`: Core execution and module orchestrator.
+* `config.py`: Intents management and API configuration (Prefix: `!`).
+* `moderation.py`: Security system, filters, and user control.
+* `commands.py`: Economic logic and server utilities.
+* `bank_system.py`: JSON database engine and data persistence.
 
-## ✨ Características Principales
+## ✨ Core Features
 
-### 🛡️ Módulo de Seguridad (Security)
-* **Sistema de Warns**: Registro persistente de amonestaciones con expulsión automática tras 3 avisos.
-* **Anti-Spam de Invitaciones**: Filtro inteligente que bloquea enlaces de otros servidores (bypass para administradores).
-* **Limpieza de Logs**: Comandos rápidos para mantenimiento de canales.
+### 🛡️ Security Module
+* **Warning System**: Persistent tracking of user infractions with automatic kick-action after 3 warnings.
+* **Invite Anti-Spam**: Intelligent filter that blocks external server links (Administrator bypass included).
+* **Log Maintenance**: High-speed commands for channel cleanup and moderation.
 
-### 💰 Sistema Económico (Economy)
-* **Persistencia Total**: Los saldos y registros se guardan en tiempo real.
-* **Interacción Social**: Comandos de transferencia (donar), azar (trabajar/robar) y competitividad.
-* **Ranking Global**: Visualización de los usuarios más influyentes del servidor mediante Embeds.
+### 💰 Economic System
+* **Full Persistence**: Balances and records are saved in real-time to prevent data loss.
+* **Social Interaction**: Transfer commands (donate), risk-reward mechanics (work/rob), and social engagement.
+* **Global Ranking**: High-fidelity Embeds displaying the most influential users in the server.
 
-## 📜 Lista de Comandos
+## 📜 Command List
 
-| Comando | Categoría | Descripción |
+| Command | Category | Description |
 | :--- | :--- | :--- |
-| `$perfil` | Utilidad | Muestra la ficha técnica, saldo y historial de seguridad. |
-| `$ranking` | Economía | Top 5 de usuarios con mayor liquidez. |
-| `$warn` | Seguridad | Añade un aviso a un usuario (Admin). |
-| `$limpiar` | Moderación | Borrado masivo de mensajes. |
-| `$trabajar` | Economía | Genera ingresos aleatorios (Cooldown de 3 min). |
+| `!profile` | Utility | Displays user technical file, balance, and security history. |
+| `!ranking` | Economy | Displays Top 5 users with the highest liquidity. |
+| `!warn` | Security | Issues a formal warning to a user (Admin only). |
+| `!clear` | Moderation | Bulk message deletion for channel maintenance. |
+| `!work` | Economy | Generates random income (3-minute cooldown). |
 
-## 🌐 Despliegue y Pruebas
+## 🌐 Deployment & Testing
 
-Actualmente, Rez se encuentra en fase de **Beta Privada**. 
-
-1. Clona el repositorio.
-2. Crea un archivo `.env` con tu `DISCORD_TOKEN`.
-3. Instala las dependencias: `pip install discord.py python-dotenv`.
-4. Ejecuta `main.py` para iniciar el sistema.
+1. Clone the repository.
+2. Create a `.env` file containing your `DISCORD_TOKEN`.
+3. Install dependencies: `pip install discord.py python-dotenv`.
+4. Run `main.py` to initialize the system.
 
 ---
-Desarrollado con 💻 por **Snow099** ⭐
+Developed with 💻 by **Snow099** ⭐
