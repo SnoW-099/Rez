@@ -91,6 +91,8 @@ async def ranking(ctx):
     )
 
     # 2. Recorremos los primeros 5 puestos
+    embed.set_thumbnail(url=bot.user.display_avatar.url)
+
     for i, (id_usuario, saldo) in enumerate(ranking_usuarios[:5], start=1):
         try:
             # Buscamos el objeto usuario para obtener su nombre real
@@ -108,4 +110,42 @@ async def ranking(ctx):
 
     embed.set_footer(text="Rez Bot - El mago de las runas")
     
+    await ctx.send(embed=embed)
+
+
+
+@bot.command()
+async def perfil(ctx, miembro: discord.Member = None):
+    miembro = miembro or ctx.author  # Si no hay mención, es tu perfil
+    usuario_id = str(miembro.id)
+
+    # Corregido el acceso al dinero
+    dinero = banco.get(usuario_id, 0)
+                           
+    # Corregido el import y el acceso a avisos
+    from moderation import avisos_usuarios
+    avisos = avisos_usuarios.get(miembro.id, 0)
+
+    embed = discord.Embed(
+        title=f"📜 Perfil de {miembro.display_name}",
+        # Verde si 0 avisos, Amarillo si tiene alguno
+        color=0x00ff00 if avisos == 0 else 0xffcc00 
+    )
+
+    # Imagen de perfil
+    if miembro.avatar:
+        embed.set_thumbnail(url=miembro.avatar.url)
+
+    # Datos del perfil
+    embed.add_field(name="💰 Dinero", value=f"{dinero} monedas", inline=True)
+    
+    estado_seguridad = "✅ Limpio" if avisos == 0 else f"⚠️ {avisos}/3 Avisos"
+    embed.add_field(name="🛡️ Seguridad", value=estado_seguridad, inline=True)
+
+    # Fecha de unión corregida
+    fecha_union = miembro.joined_at.strftime("%d/%m/%Y")
+    embed.add_field(name="📅 Miembro desde", value=fecha_union, inline=False)
+
+    embed.set_footer(text=f"ID del Usuario: {usuario_id} | Rez Bot")  
+
     await ctx.send(embed=embed)

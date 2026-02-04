@@ -1,47 +1,52 @@
-# Rez 🤖 | Security & Economy System
+# Rez Bot - Liquid Black Edition 🖤
 
-Rez is a high-performance Discord bot designed to balance community management with a competitive economic framework. Built for **reliability, efficiency, and security**.
+Rez is a next-generation Discord bot featuring a premium "God Tier" web interface with a 'Liquid Black' aesthetic. Built for performance, style, and seamless user experience.
 
-> 🛡️ **Project Status**: Active Beta. Rez now features full data persistence and independent administrative modules.
+![Rez Bot](frontend/public/images/bot_icon.jpg)
 
-## 🛠️ Project Architecture
+## ✨ Features
 
-The bot utilizes a modular structure to ensure stability and maintainability:
+### 🎨 Web Interface (Frontend)
+- **Liquid Black Aesthetic**: Pure black design with deep grey accents (`#09090b`) and `blurple` highlights.
+- **Immersive Animations**:
+  - **Ripple Loading**: Cinematic 3s intro.
+  - **Sand Dissolve**: Physics-based text revelation.
+  - **3D Tilt Cards**: Interactive depth effects on mouse hover.
+  - **Starfield Background**: Subtle particle system.
+- **Tech Stack**: React 18, React Router v6, CSS animations.
 
-* `main.py`: Core execution and module orchestrator.
-* `config.py`: Intents management and API configuration (Prefix: `!`).
-* `moderation.py`: Security system, filters, and user control.
-* `commands.py`: Economic logic and server utilities.
-* `bank_system.py`: JSON database engine and data persistence.
+### ⚙️ Backend (API)
+- **Live Status Monitoring**: Real-time bot status and stats.
+- **REST API**: built with Flask (Python).
+- **Scalable Architecture**: Modular command handling and database integration.
 
-## ✨ Core Features
+## 🚀 Installation & Setup
 
-### 🛡️ Security Module
-* **Warning System**: Persistent tracking of user infractions with automatic kick-action after 3 warnings.
-* **Invite Anti-Spam**: Intelligent filter that blocks external server links (Administrator bypass included).
-* **Log Maintenance**: High-speed commands for channel cleanup and moderation.
+### Prerequisites
+- Node.js (v14+)
+- Python (v3.8+)
 
-### 💰 Economic System
-* **Full Persistence**: Balances and records are saved in real-time to prevent data loss.
-* **Social Interaction**: Transfer commands (donate), risk-reward mechanics (work/rob), and social engagement.
-* **Global Ranking**: High-fidelity Embeds displaying the most influential users in the server.
+### 1. Backend Setup
+```bash
+cd backend
+pip install -r requirements.txt
+python main.py
+```
 
-## 📜 Command List
+### 2. Frontend Setup
+```bash
+cd frontend
+npm install
+npm start
+```
 
-| Command | Category | Description |
-| :--- | :--- | :--- |
-| `!profile` | Utility | Displays user technical file, balance, and security history. |
-| `!ranking` | Economy | Displays Top 5 users with the highest liquidity. |
-| `!warn` | Security | Issues a formal warning to a user (Admin only). |
-| `!clear` | Moderation | Bulk message deletion for channel maintenance. |
-| `!work` | Economy | Generates random income (3-minute cooldown). |
+## 🌍 Deployment
 
-## 🌐 Deployment & Testing
+### Deploy to Netlify
+1. New Site -> Import from Git
+2. **Build Command**: `npm run build`
+3. **Publish Directory**: `frontend/build`
+4. **Base Directory**: `frontend`
 
-1. Clone the repository.
-2. Create a `.env` file containing your `DISCORD_TOKEN`.
-3. Install dependencies: `pip install discord.py python-dotenv`.
-4. Run `main.py` to initialize the system.
-
----
-Developed with 💻 by **Snow099** ⭐
+## 🤝 Contributing
+Built by **Rez#1996**. All rights reserved.

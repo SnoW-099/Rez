@@ -1,0 +1,193 @@
+/* App.css - Rez Dark Liquid Aesthetic */
+@import url('https://fonts.googleapis.com/css2?family=MSGothic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Unified Dark Palette - Refined */
+  --bg-color: #000000;
+
+  /* Single cohesive dark grey for all containers */
+  --card-bg: #09090b;
+  --element-bg: #09090b;
+  /* Uniform button/card backgrounds */
+  --element-hover: #18181b;
+  /* Hover state */
+
+  --text-primary: #ededed;
+  /* Slightly softer white */
+  --text-secondary: #71717a;
+  /* Cool grey */
+
+  --border-color: #1f1f22;
+  --accent-color: #5865F2;
+
+  /* Consistent Shapes */
+  --card-radius: 16px;
+  --btn-radius: 8px;
+
+  --max-width: 600px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Cursor Hide */
+body {
+  cursor: none;
+  /* Hide default cursor */
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a,
+button,
+.pointer {
+  cursor: none;
+  /* Keep hidden even on interactables */
+}
+
+/* Background Effects */
+.layout-container {
+  padding-bottom: 50px;
+  min-height: 100vh;
+  background: #000;
+}
+
+/* Navigation */
+.layout-header {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.layout-content {
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 0 20px 40px;
+}
+
+.content-wrapper {
+  width: 100%;
+}
+
+/* Bento/Profile Grid - Single Column Force for Mobile/Profile feel */
+.bento-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Global Card Style */
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  padding: 24px;
+  transition: border-color 0.2s ease;
+}
+
+.glass-card:hover {
+  border-color: #3f3f46;
+}
+
+/* Typography Defaults */
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 700;
+}
+
+.text-gradient {
+  color: var(--text-primary);
+}
+
+/* Sand/Dissolve Text Animation */
+.sand-text {
+  position: relative;
+  color: transparent;
+  /* Text itself is transparent */
+  background: #fff;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: sandDissolve 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  /* Faster duration */
+  filter: blur(5px);
+  opacity: 0;
+}
+
+@keyframes sandDissolve {
+  0% {
+    filter: blur(8px);
+    opacity: 0;
+    transform: scale(1.1) translateY(10px);
+    letter-spacing: 10px;
+    /* Scattered grains */
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    letter-spacing: normal;
+    color: white;
+    /* Final solid state */
+  }
+}
+
+/* Global Button Styles */
+.secondary-btn {
+  background: var(--element-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 12px;
+  border-radius: var(--btn-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+.secondary-btn:hover {
+  background: #27272a;
+  border-color: #52525b;
+}
+
+/* Utility Animations */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  color: var(--text-secondary);
+}
