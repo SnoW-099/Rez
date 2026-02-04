@@ -11,7 +11,7 @@ const ParticlesBackground = () => {
         // Configuration
         const particleCount = 60;
         const particles = [];
-        const connectionDistance = 100;
+        // connectionDistance removed as it was unused
 
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;

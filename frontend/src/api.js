@@ -41,9 +41,11 @@ export const getCommands = async () => {
   }
 };
 
-// Exportar todas las funciones como un objeto
-export default {
+const apiMethods = {
   getBotStatus,
   getBotStats,
   getCommands
 };
+
+// Exportar todas las funciones como un objeto
+export default apiMethods;

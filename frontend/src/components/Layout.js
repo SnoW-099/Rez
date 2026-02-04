@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import LoadingScreen from './LoadingScreen';
 import ParticlesBackground from './ParticlesBackground';
@@ -8,7 +7,6 @@ import './Layout.css';
 
 const Layout = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
-  // const location = useLocation(); // Unused
 
   useEffect(() => {
     // Fake loading for 3 seconds on initial mount
