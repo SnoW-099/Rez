@@ -5,6 +5,8 @@ from bank_system import banco, guardar_banco, cargar_banco
 from utils import on_command_error
 from config import bot
 
+# Rez new update! - February 4, 2026
+
 
 # Cargar el banco al iniciar
 cargar_banco()
