@@ -5,7 +5,7 @@
 
 ---
 
-[**DASHBOARD**](https://rez-bot.netlify.app/) &nbsp; • &nbsp; [**UPDATES**](https://rez-bot.netlify.app/) &nbsp; • &nbsp; [**PORTFOLIO**](https://portfolio-snow.netlify.app/)
+[**DASHBOARD**](https://rez-bot.netlify.app/) &nbsp; • &nbsp; [**PORTFOLIO**](https://portfolio-snow.netlify.app/)
 
 ---
 
@@ -13,9 +13,6 @@
 
 ### SYSTEM OVERVIEW
 Rez is a high-performance infrastructure for Discord, engineered with a focus on absolute minimalism and technical efficiency. The system operates on a **Liquid Black** architecture, prioritizing low-latency response times and a seamless user experience.
-
-### CURRENT STATUS: ACTIVE BETA
-The project is currently in a **Beta** stage. Core modules are operational, but the system undergoes continuous optimization. Features and security protocols are subject to real-time updates to ensure maximum stability.
 
 ### TECHNICAL SPECIFICATIONS
 * **Core Engine:** Modular Python-based architecture optimized for high-concurrency environments.
@@ -31,7 +28,9 @@ The project is currently in a **Beta** stage. Core modules are operational, but 
 ---
 
 <div align="center">
-  <code>[ STATUS: OPERATIONAL / STAGE: BETA ]</code>
-  <br />
-  <sub>DEVELOPED BY <strong>SNOW-099</strong></sub>
-</div>
+
+`STAGE: BETA` &nbsp; `TYPE: PUBLIC SERVICE` &nbsp; `STABILITY: HIGH`
+
+```javascript
+[ SYSTEM_STATUS ]: OPERATIONAL
+[ VERSION       ]: 1.0.0-BETA
