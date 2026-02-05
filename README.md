@@ -1,1 +1,29 @@
-🌌 Rez Bot | Security & Economy System<div align="center"><p><strong>Elevate your Discord community with a premium economy and security experience.</strong></p><a href="https://rez-bot.netlify.app/"><strong>Official Dashboard »</strong></a><br /><br /><img src="https://img.shields.io/badge/Service-Cloud_Hosted-000000?style=for-the-badge&logo=icloud" alt="Hosted" /><img src="https://img.shields.io/badge/Uptime-24/7-34c759?style=for-the-badge" alt="Uptime" /><img src="https://img.shields.io/badge/Community-Verified_Style-5865F2?style=for-the-badge&logo=discord" alt="Style" /></div>⚡ Cero Instalación. Poder Total.Rez Bot está diseñado como un SaaS (Software as a Service). No necesitas descargar archivos, configurar entornos de Python ni mantener servidores encendidos en tu casa.🚀 Add & Play: Haz clic en "Add to Server" y empieza a usarlo al instante.☁️ Cloud Infrastructure: Alojado en infraestructura de alto rendimiento para garantizar latencia mínima.💎 Liquid Black UI: Gestiona y visualiza las estadísticas de tu servidor desde una interfaz web cinematográfica.🛡️ Módulo de Seguridad ProactivaMantén tu servidor limpio sin esfuerzo. Rez se encarga de la vigilancia mientras tú haces crecer tu comunidad.Anti-Spam Inteligente: Bloqueo automático de invitaciones a otros servidores.Warn System: Historial de infracciones persistente con expulsión automática.Fast Cleanup: Comandos de moderación optimizados para borrar rastro de spam en milisegundos.💰 Economía Global IntegradaUn sistema económico competitivo y adictivo que fomenta la actividad de los usuarios.Global Ranking: Compite por el puesto #1 en la "Rich List" global.Social Interactions: Donaciones entre usuarios, trabajos diarios y mecánicas de riesgo/recompensa.Real-time Persistence: Tus monedas están seguras. Cada transacción se guarda instantáneamente en nuestra nube.📜 Guía Rápida de Comandos (Prefijo: !)ComandoAcción!profileAbre tu ficha técnica: balance, nivel e historial.!rankingDespliega el Top 5 de los usuarios más influyentes.!workRealiza una jornada laboral para obtener ingresos.!clear [X]Limpia el chat de forma masiva (Requiere permisos).🔗 Enlaces ImportantesWeb Oficial: rez-bot.netlify.appSoporte & Updates: Visita la sección /updates en nuestra web para ver el registro de cambios en 3D.Portfolio del Autor: Angel / Snow<div align="center"><strong>Rez Bot</strong> is a standalone service developed by <strong>Snow099</strong>.<br /><em>Bringing Apple-grade design to Discord communities.</em></div>
+🌌 REZ
+<div align="center"> <img src="https://rez-bot.netlify.app/logo.png" width="150" /> <br /> <br /> <code><strong>LIQUID BLACK AESTHETIC</strong></code> <br /> <br /> <a href="https://rez-bot.netlify.app/"><strong>ENTER THE DASHBOARD</strong></a> </div>
+
+⚡ THE VISION
+Rez no es un bot, es una experiencia. Hemos fusionado el backend más sólido de Python con una interfaz inspirada en el minimalismo de Apple.
+
+No Install: Olvida los archivos .env y el terminal. Un clic y está en tu servidor.
+
+Liquid UI: Un Dashboard web con Tilt 3D, animaciones de cine y partículas.
+
+Global Economy: Tu progreso es real, persistente y vive en la nube.
+
+🛡️ SECURITY & POWER
+"Seguridad nivel Dios, estética nivel Apple."
+
+Auto-Mod: Filtro de invitaciones inteligente y sistema de warns persistentes.
+
+High Performance: Ejecución modular diseñada para latencia cero.
+
+Global Ranking: Compite en la Rich List y domina la economía de tu comunidad.
+
+🕹️ QUICK START
+Invite: Dale al botón en la Web Oficial.
+
+Execute: Usa !profile para iniciar tu viaje.
+
+Dominate: Gestiona todo desde el panel Liquid Black.
+
+<div align="center"> <sub>Crafted with obsession by <strong>Snow099</strong></sub> <br /> <code>[SYSTEM STATUS: ONLINE]</code> </div>
