@@ -138,7 +138,7 @@ class OwnerCog(commands.Cog):
 
     @commands.command(name='botstat')
     @is_owner()
-    async def bot_stats(self, ctx):
+    async def botstats(self, ctx):
         """[OWNER] Muestra estadísticas detalladas del bot"""
         increment_command_count()
         
