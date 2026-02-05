@@ -105,7 +105,7 @@ async def on_guild_remove(guild):
 
 # Cargar extensiones
 async def load_extensions():
-    extensions = ['commands', 'moderation', 'music', 'levels']
+    extensions = ['commands', 'moderation', 'music', 'levels', 'games', 'giveaways', 'tickets', 'owner']
     for ext in extensions:
         try:
             await bot.load_extension(ext)
