@@ -8,7 +8,6 @@ import sys
 import logging
 from datetime import datetime
 
-# Añadir el directorio backend al path para importar módulos
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from config_backend import config
@@ -16,7 +15,7 @@ from config_backend import config
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-CORS(app)  # Habilitar CORS para peticiones desde el frontend
+CORS(app)
 
 # Variable global para almacenar el estado del bot
 bot_status = {
@@ -48,17 +47,37 @@ def get_bot_stats():
 def get_commands():
     """Obtener lista de comandos disponibles"""
     commands = [
+        # Utilidad
         {'name': '!ping', 'description': 'Verifica la latencia del bot', 'category': 'Utilidad'},
-        {'name': '!help', 'description': 'Muestra todos los comandos disponibles', 'category': 'Utilidad'},
-        {'name': '!profile [@usuario]', 'description': 'Muestra tu perfil o el de otro usuario', 'category': 'Economía'},
-        {'name': '!balance [@usuario]', 'description': 'Consulta tu saldo o el de otro usuario', 'category': 'Economía'},
-        {'name': '!work', 'description': 'Trabaja para ganar dinero (cooldown: 3 min)', 'category': 'Economía'},
-        {'name': '!transfer @usuario cantidad', 'description': 'Transfiere dinero a otro usuario', 'category': 'Economía'},
-        {'name': '!rob @usuario', 'description': 'Intenta robar dinero (50% de éxito)', 'category': 'Economía'},
-        {'name': '!ranking', 'description': 'Top 5 usuarios más ricos', 'category': 'Economía'},
-        {'name': '!warn @usuario', 'description': 'Advierte a un usuario (Mods)', 'category': 'Moderación'},
-        {'name': '!clear cantidad', 'description': 'Elimina mensajes (Mods)', 'category': 'Moderación'},
-        {'name': '!play canción', 'description': 'Reproduce música en tu canal', 'category': 'Música'},
+        {'name': '!help', 'description': 'Muestra todos los comandos', 'category': 'Utilidad'},
+        
+        # Economía
+        {'name': '!profile [@user]', 'description': 'Tu perfil completo con stats', 'category': 'Economía'},
+        {'name': '!balance [@user]', 'description': 'Consulta tu saldo', 'category': 'Economía'},
+        {'name': '!work', 'description': 'Trabaja y gana $50-200 (3 min cd)', 'category': 'Economía'},
+        {'name': '!daily', 'description': 'Recompensa diaria $200-500 (24h cd)', 'category': 'Economía'},
+        {'name': '!transfer @user $', 'description': 'Transfiere dinero', 'category': 'Economía'},
+        {'name': '!rob @user', 'description': 'Intenta robar (50% éxito)', 'category': 'Economía'},
+        {'name': '!ranking', 'description': 'Top 5 más ricos', 'category': 'Economía'},
+        {'name': '!shop', 'description': 'Tienda de items y roles', 'category': 'Economía'},
+        {'name': '!buy [item]', 'description': 'Compra un item de la tienda', 'category': 'Economía'},
+        
+        # Niveles
+        {'name': '!level [@user]', 'description': 'Ver nivel y XP', 'category': 'Niveles'},
+        {'name': '!leaderboard', 'description': 'Top 10 por XP', 'category': 'Niveles'},
+        
+        # Moderación
+        {'name': '!warn @user [razón]', 'description': 'Advierte (3 warns = kick)', 'category': 'Moderación'},
+        {'name': '!mute @user [tiempo]', 'description': 'Silencia (ej: 10m, 1h)', 'category': 'Moderación'},
+        {'name': '!unmute @user', 'description': 'Quita el silencio', 'category': 'Moderación'},
+        {'name': '!kick @user [razón]', 'description': 'Expulsa del servidor', 'category': 'Moderación'},
+        {'name': '!ban @user [razón]', 'description': 'Banea permanentemente', 'category': 'Moderación'},
+        {'name': '!unban [id]', 'description': 'Desbanea por ID', 'category': 'Moderación'},
+        {'name': '!clear [1-100]', 'description': 'Elimina mensajes', 'category': 'Moderación'},
+        {'name': '!slowmode [seg]', 'description': 'Modo lento del canal', 'category': 'Moderación'},
+        
+        # Música
+        {'name': '!play [canción]', 'description': 'Reproduce música', 'category': 'Música'},
         {'name': '!join', 'description': 'Entra al canal de voz', 'category': 'Música'},
         {'name': '!leave', 'description': 'Sale del canal de voz', 'category': 'Música'}
     ]

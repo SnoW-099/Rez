@@ -203,6 +203,94 @@ class CommandsCog(commands.Cog):
         
         await ctx.send(f"🏓 Pong! **{latency}ms** ({status})")
 
+    # ============== TIENDA ==============
+
+    SHOP_ITEMS = {
+        'lucky_charm': {
+            'name': '🍀 Lucky Charm',
+            'price': 500,
+            'description': '+10% en ganancias de !work por 1 hora',
+            'type': 'boost'
+        },
+        'shield': {
+            'name': '🛡️ Protection Shield',
+            'price': 1000,
+            'description': 'Protección contra robos por 2 horas',
+            'type': 'protection'
+        },
+        'xp_boost': {
+            'name': '⚡ XP Boost',
+            'price': 750,
+            'description': '+50% XP por 30 minutos',
+            'type': 'boost'
+        },
+        'mystery_box': {
+            'name': '🎁 Mystery Box',
+            'price': 300,
+            'description': 'Contiene entre $0 y $1000 aleatorio',
+            'type': 'instant'
+        },
+        'vip_badge': {
+            'name': '👑 VIP Badge',
+            'price': 5000,
+            'description': 'Badge especial en tu perfil',
+            'type': 'cosmetic'
+        }
+    }
+
+    @commands.command(name='shop', aliases=['tienda', 'store'])
+    async def shop(self, ctx):
+        """Muestra la tienda de items"""
+        increment_command_count()
+        
+        embed = discord.Embed(
+            title="🛒 Tienda de Rez",
+            description="Usa `!buy [item]` para comprar",
+            color=0x10b981
+        )
+        
+        for item_id, item in self.SHOP_ITEMS.items():
+            embed.add_field(
+                name=f"{item['name']} - ${item['price']:,}",
+                value=f"ID: `{item_id}`\n{item['description']}",
+                inline=True
+            )
+        
+        await ctx.send(embed=embed)
+
+    @commands.command(name='buy', aliases=['comprar'])
+    async def buy(self, ctx, item_id: str = None):
+        """Compra un item de la tienda"""
+        increment_command_count()
+        
+        if item_id is None:
+            await ctx.send("❌ Usa `!buy [item_id]`. Ver items con `!shop`")
+            return
+        
+        item_id = item_id.lower()
+        if item_id not in self.SHOP_ITEMS:
+            await ctx.send("❌ Item no encontrado. Usa `!shop` para ver items.")
+            return
+        
+        item = self.SHOP_ITEMS[item_id]
+        user_data = self.bank.get_user_data(ctx.author.id)
+        
+        if user_data['balance'] < item['price']:
+            await ctx.send(f"❌ Necesitas **${item['price']:,}** pero tienes **${user_data['balance']:,}**")
+            return
+        
+        self.bank.remove_money(ctx.author.id, item['price'])
+        
+        # Procesar items especiales
+        if item_id == 'mystery_box':
+            reward = random.randint(0, 1000)
+            self.bank.add_money(ctx.author.id, reward)
+            await ctx.send(f"🎁 Abriste la Mystery Box y encontraste **${reward}**!")
+        else:
+            # Para otros items, simplemente confirmar compra
+            # En una implementación completa, guardarías el item en el inventario
+            await ctx.send(f"✅ Compraste {item['name']} por **${item['price']:,}**!")
+
     @commands.command(name='help')
     async def show_help(self, ctx):
         """Muestra todos los comandos disponibles"""
@@ -220,9 +308,11 @@ class CommandsCog(commands.Cog):
         `!balance` - Consulta tu saldo
         `!work` - Trabaja (cooldown: 3min)
         `!daily` - Recompensa diaria
-        `!transfer @user cantidad` - Transferir
+        `!transfer @user $` - Transferir
         `!rob @user` - Robar (50% éxito)
         `!ranking` - Top 5 más ricos
+        `!shop` - Ver tienda
+        `!buy [item]` - Comprar item
         """
         embed.add_field(name="💰 Economía", value=economy, inline=False)
         
@@ -237,8 +327,10 @@ class CommandsCog(commands.Cog):
         mod = """
         `!warn @user` - Advertir
         `!mute @user [tiempo]` - Silenciar
+        `!kick @user` - Expulsar
         `!ban @user` - Banear
         `!clear cantidad` - Borrar mensajes
+        `!slowmode [seg]` - Modo lento
         """
         embed.add_field(name="🛡️ Moderación", value=mod, inline=False)
         
