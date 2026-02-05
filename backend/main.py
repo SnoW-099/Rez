@@ -6,7 +6,16 @@ import discord
 from discord.ext import commands
 import sys
 import os
+import logging
 from datetime import datetime
+
+# Configurar logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s | %(levelname)-8s | %(name)s: %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger('RezBot')
 
 # Añadir el directorio backend al path para importar módulos
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -23,13 +32,21 @@ intents.members = True
 
 # Inicializar el bot
 bot = commands.Bot(command_prefix=config.PREFIX, intents=intents)
-bot.remove_command('help') # Eliminar el comando help por defecto para usar el personalizado
+bot.remove_command('help')  # Eliminar el comando help por defecto para usar el personalizado
 
 @bot.event
 async def on_ready():
-    print(f'{bot.user} ha iniciado sesión en Discord!')
-    print(f'Conectado a {len(bot.guilds)} servidores')
-    print(f'Sirviendo a {len(bot.users)} usuarios')
+    logger.info(f'{bot.user} ha iniciado sesión en Discord!')
+    logger.info(f'Conectado a {len(bot.guilds)} servidores')
+    logger.info(f'Sirviendo a {len(bot.users)} usuarios')
+    
+    # Establecer presencia del bot
+    await bot.change_presence(
+        activity=discord.Activity(
+            type=discord.ActivityType.watching,
+            name=f"{len(bot.guilds)} servidores | !help"
+        )
+    )
 
     # Actualizar el estado del bot en la API
     update_bot_status('online', len(bot.guilds), len(bot.users), 0)
@@ -42,18 +59,40 @@ async def update_status_periodically():
     while True:
         await asyncio.sleep(30)  # Actualizar cada 30 segundos
         update_bot_status('online', len(bot.guilds), len(bot.users), get_command_count())
+        
+        # Actualizar presencia
+        await bot.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name=f"{len(bot.guilds)} servidores | !help"
+            )
+        )
+
+@bot.event
+async def on_command_error(ctx, error):
+    """Manejo global de errores de comandos"""
+    if isinstance(error, commands.CommandNotFound):
+        return  # Ignorar comandos no encontrados
+    elif isinstance(error, commands.CommandOnCooldown):
+        await ctx.send(f"⏰ Espera {round(error.retry_after, 1)} segundos para usar este comando de nuevo.")
+    elif isinstance(error, commands.MissingPermissions):
+        await ctx.send("❌ No tienes permisos para usar este comando.")
+    elif isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send(f"❌ Falta un argumento: `{error.param.name}`")
+    else:
+        logger.error(f"Error en comando: {error}")
 
 @bot.event
 async def on_command_completion(ctx):
     """Evento cuando se completa un comando"""
-    # El conteo de comandos se maneja en cada comando individual
-    pass
+    logger.debug(f"Comando ejecutado: {ctx.command.name} por {ctx.author}")
 
 # Cargar extensiones
 async def load_extensions():
     await bot.load_extension('commands')
     await bot.load_extension('moderation')
     await bot.load_extension('music')
+    logger.info("Extensiones cargadas correctamente")
 
 async def setup_hook():
     await load_extensions()
@@ -65,6 +104,7 @@ async def main():
     # Iniciar el servidor API en un hilo separado
     api_thread = threading.Thread(target=run_api_server, daemon=True)
     api_thread.start()
+    logger.info("Servidor API iniciado en hilo separado")
 
     # Iniciar el bot
     async with bot:
@@ -73,9 +113,10 @@ async def main():
 if __name__ == "__main__":
     try:
         config.validate()
+        logger.info("Iniciando Rez Bot...")
         asyncio.run(main())
     except KeyboardInterrupt:
-        print("\nBot detenido manualmente")
+        logger.info("Bot detenido manualmente")
     except Exception as e:
-        print(f"Error al iniciar el bot: {e}")
+        logger.error(f"Error al iniciar el bot: {e}")
         sys.exit(1)
