@@ -1,29 +1,45 @@
-🌌 REZ
-<div align="center"> <img src="https://rez-bot.netlify.app/logo.png" width="150" /> <br /> <br /> <code><strong>LIQUID BLACK AESTHETIC</strong></code> <br /> <br /> <a href="https://rez-bot.netlify.app/"><strong>ENTER THE DASHBOARD</strong></a> </div>
+<div align="center">
 
-⚡ THE VISION
-Rez no es un bot, es una experiencia. Hemos fusionado el backend más sólido de Python con una interfaz inspirada en el minimalismo de Apple.
+<img src="https://rez-bot.netlify.app/logo.png" width="120" style="filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));" />
 
-No Install: Olvida los archivos .env y el terminal. Un clic y está en tu servidor.
+# 🌌 REZ
+`L I Q U I D · B L A C K · A E S T H E T I C`
 
-Liquid UI: Un Dashboard web con Tilt 3D, animaciones de cine y partículas.
+---
 
-Global Economy: Tu progreso es real, persistente y vive en la nube.
+### ⚡ THE VISION
+**Rez no es un bot, es una experiencia.**
+Hemos fusionado el backend más sólido de Python con una interfaz inspirada en el minimalismo de Apple.
 
-🛡️ SECURITY & POWER
-"Seguridad nivel Dios, estética nivel Apple."
+[**ENTER THE DASHBOARD**](https://rez-bot.netlify.app/)
 
-Auto-Mod: Filtro de invitaciones inteligente y sistema de warns persistentes.
+---
 
-High Performance: Ejecución modular diseñada para latencia cero.
+</div>
 
-Global Ranking: Compite en la Rich List y domina la economía de tu comunidad.
+<details open>
+<summary><strong> 🛡️ SECURITY & POWER</strong></summary>
+<br />
+<blockquote>"Seguridad nivel Dios, estética nivel Apple."</blockquote>
 
-🕹️ QUICK START
-Invite: Dale al botón en la Web Oficial.
+* **Auto-Mod:** Filtro de invitaciones inteligente y sistema de warns persistentes.
+* **High Performance:** Ejecución modular diseñada para latencia cero.
+* **Global Ranking:** Compite en la Rich List y domina la economía de tu comunidad.
+</details>
 
-Execute: Usa !profile para iniciar tu viaje.
+<details open>
+<summary><strong> 🕹️ QUICK START</strong></summary>
+<br />
 
-Dominate: Gestiona todo desde el panel Liquid Black.
+1.  **Invite:** Dale al botón en la [Web Oficial](https://rez-bot.netlify.app/).
+2.  **Execute:** Usa `!profile` para iniciar tu viaje.
+3.  **Dominate:** Gestiona todo desde el panel Liquid Black.
+</details>
 
-<div align="center"> <sub>Crafted with obsession by <strong>Snow099</strong></sub> <br /> <code>[SYSTEM STATUS: ONLINE]</code> </div>
+---
+
+<div align="center">
+  <sub>Crafted with obsession by <strong>Snow099</strong></sub>
+  <br />
+  <code>[ SYSTEM STATUS: ONLINE ]</code>
+</div>
