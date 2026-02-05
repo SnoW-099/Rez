@@ -5,119 +5,100 @@ from bank_system import BankSystem
 from commands_manager import increment_command_count
 
 class LevelsCog(commands.Cog):
-    """Sistema de niveles y XP"""
+    """Levels and XP system"""
     
     def __init__(self, bot):
         self.bot = bot
         self.bank = BankSystem()
-        self.xp_per_message = (15, 25)  # Min, Max XP por mensaje
-        self.xp_cooldown = 60  # Segundos entre ganancia de XP
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        """Dar XP por cada mensaje (con cooldown)"""
-        # Ignorar bots y comandos
+        """Give XP for each message"""
         if message.author.bot:
             return
-        if message.content.startswith('!'):
+        if not message.guild:
             return
         
-        user_id = message.author.id
+        xp_gained = random.randint(5, 15)
+        leveled_up, new_level = self.bank.add_xp(message.author.id, xp_gained)
         
-        # Verificar cooldown de XP
-        if not self.bank.can_gain_xp(user_id, self.xp_cooldown):
-            return
-        
-        # Dar XP aleatorio
-        xp_gained = random.randint(*self.xp_per_message)
-        leveled_up, new_level = self.bank.add_xp(user_id, xp_gained)
-        
-        # Notificar si subió de nivel
         if leveled_up:
+            bonus = new_level * 100
+            self.bank.add_money(message.author.id, bonus)
+            
             embed = discord.Embed(
-                title="🎉 ¡Subiste de Nivel!",
-                description=f"**{message.author.display_name}** alcanzó el nivel **{new_level}**!",
-                color=0xffd700
+                title="⬆️ Level Up!",
+                description=f"{message.author.mention} reached **level {new_level}**!",
+                color=0x10b981
             )
+            embed.add_field(name="Reward", value=f"+${bonus:,}", inline=True)
             embed.set_thumbnail(url=message.author.avatar.url if message.author.avatar else message.author.default_avatar.url)
             
-            # Bonus por subir de nivel
-            bonus = new_level * 50
-            self.bank.add_money(user_id, bonus)
-            embed.add_field(name="🎁 Bonus", value=f"+${bonus}", inline=False)
-            
-            await message.channel.send(embed=embed)
+            try:
+                await message.channel.send(embed=embed, delete_after=10)
+            except:
+                pass
 
-    @commands.command(name='level', aliases=['lvl', 'nivel'])
+    @commands.command(name='level', aliases=['lvl', 'xp'])
     async def level(self, ctx, member: discord.Member = None):
-        """Ver tu nivel o el de otro usuario"""
+        """View your level and XP"""
         increment_command_count()
         
         if member is None:
             member = ctx.author
         
         user_data = self.bank.get_user_data(member.id)
-        level = user_data.get('level', 0)
-        xp = user_data.get('xp', 0)
-        messages = user_data.get('messages', 0)
+        current_level = user_data.get('level', 0)
+        current_xp = user_data.get('xp', 0)
+        xp_for_next = self.bank.xp_for_level(current_level + 1)
+        xp_for_current = self.bank.xp_for_level(current_level)
         
-        # Calcular progreso
-        current_level_xp = self.bank.xp_for_level(level)
-        next_level_xp = self.bank.xp_for_level(level + 1)
-        progress = xp - current_level_xp
-        needed = next_level_xp - current_level_xp
-        percentage = int((progress / needed) * 100) if needed > 0 else 100
+        xp_progress = current_xp - xp_for_current
+        xp_needed = xp_for_next - xp_for_current
+        progress_percent = min(100, int((xp_progress / xp_needed) * 100))
         
-        # Barra de progreso visual
-        filled = int(percentage / 10)
-        bar = "▓" * filled + "░" * (10 - filled)
+        bar_length = 20
+        filled = int(bar_length * progress_percent / 100)
+        bar = '█' * filled + '░' * (bar_length - filled)
         
         embed = discord.Embed(
-            title=f"⭐ Nivel de {member.display_name}",
-            color=0x5865F2
+            title=f"⭐ {member.display_name}'s Level",
+            color=0x8b5cf6
         )
+        embed.add_field(name="Level", value=f"**{current_level}**", inline=True)
+        embed.add_field(name="Total XP", value=f"{current_xp:,}", inline=True)
+        embed.add_field(name="Progress", value=f"`{bar}` {progress_percent}%\n{xp_progress:,}/{xp_needed:,} XP", inline=False)
         embed.set_thumbnail(url=member.avatar.url if member.avatar else member.default_avatar.url)
-        
-        embed.add_field(name="Nivel", value=f"**{level}**", inline=True)
-        embed.add_field(name="XP Total", value=f"**{xp:,}**", inline=True)
-        embed.add_field(name="Mensajes", value=f"**{messages:,}**", inline=True)
-        
-        embed.add_field(
-            name=f"Progreso al nivel {level + 1}",
-            value=f"`{bar}` {percentage}%\n{progress:,} / {needed:,} XP",
-            inline=False
-        )
         
         await ctx.send(embed=embed)
 
     @commands.command(name='leaderboard', aliases=['lb', 'top'])
     async def leaderboard(self, ctx):
-        """Ver el top 10 de XP"""
+        """Top 10 XP leaderboard"""
         increment_command_count()
         
-        top_users = self.bank.get_xp_leaderboard(10)
+        users = list(self.bank.db.users.find().sort('xp', -1).limit(10))
+        
+        if not users:
+            await ctx.send("No users in the database yet!")
+            return
         
         embed = discord.Embed(
-            title="🏆 Leaderboard de XP",
-            color=0xffd700
+            title="🏆 XP Leaderboard",
+            color=0x8b5cf6
         )
         
-        medals = ["🥇", "🥈", "🥉"] + [f"`{i}.`" for i in range(4, 11)]
-        
+        medals = ['🥇', '🥈', '🥉']
         description = ""
-        for i, user_data in enumerate(top_users):
-            try:
-                user = await self.bot.fetch_user(int(user_data['user_id']))
-                username = user.name
-            except:
-                username = f"Usuario {user_data['user_id'][:8]}..."
-            
-            level = user_data.get('level', 0)
-            xp = user_data.get('xp', 0)
-            
-            description += f"{medals[i]} **{username}** - Nivel {level} ({xp:,} XP)\n"
         
-        embed.description = description or "No hay usuarios todavía."
+        for i, user in enumerate(users):
+            medal = medals[i] if i < 3 else f"`{i+1}.`"
+            user_id = user.get('user_id')
+            level = user.get('level', 0)
+            xp = user.get('xp', 0)
+            description += f"{medal} <@{user_id}> - Level **{level}** ({xp:,} XP)\n"
+        
+        embed.description = description
         await ctx.send(embed=embed)
 
 async def setup(bot):

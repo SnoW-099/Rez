@@ -1,4 +1,4 @@
-# main.py - Punto de entrada principal del bot de Discord
+# main.py - Discord Bot main entry point
 
 import asyncio
 import threading
@@ -9,7 +9,7 @@ import os
 import logging
 from datetime import datetime
 
-# Configurar logging
+# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s | %(levelname)-8s | %(name)s: %(message)s',
@@ -17,7 +17,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger('RezBot')
 
-# Añadir el directorio backend al path para importar módulos
+# Add backend directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from config_backend import config
@@ -25,45 +25,45 @@ from api_server import update_bot_status, run_api_server
 from commands_manager import get_command_count
 from database import database
 
-# Configurar intents
+# Configure intents
 intents = discord.Intents.default()
 intents.message_content = True
 intents.guilds = True
 intents.members = True
 
-# Inicializar el bot
+# Initialize bot
 bot = commands.Bot(command_prefix=config.PREFIX, intents=intents)
-bot.remove_command('help')  # Eliminar el comando help por defecto
+bot.remove_command('help')
 
 @bot.event
 async def on_ready():
-    logger.info(f'{bot.user} ha iniciado sesión en Discord!')
-    logger.info(f'Conectado a {len(bot.guilds)} servidores')
-    logger.info(f'Sirviendo a {len(bot.users)} usuarios')
+    logger.info(f'{bot.user} has logged in to Discord!')
+    logger.info(f'Connected to {len(bot.guilds)} servers')
+    logger.info(f'Serving {len(bot.users)} users')
     
-    # Verificar conexión a MongoDB
+    # Verify MongoDB connection
     try:
         database.connect()
-        logger.info("Conexión a MongoDB verificada")
+        logger.info("MongoDB connection verified")
     except Exception as e:
-        logger.error(f"Error conectando a MongoDB: {e}")
+        logger.error(f"Error connecting to MongoDB: {e}")
     
-    # Establecer presencia del bot
+    # Set bot presence
     await bot.change_presence(
         activity=discord.Activity(
             type=discord.ActivityType.watching,
-            name=f"{len(bot.guilds)} servidores | !help"
+            name=f"{len(bot.guilds)} servers | !help"
         )
     )
 
-    # Actualizar el estado del bot en la API
+    # Update bot status in API
     update_bot_status('online', len(bot.guilds), len(bot.users), 0)
 
-    # Actualizar periódicamente el estado
+    # Update status periodically
     bot.loop.create_task(update_status_periodically())
 
 async def update_status_periodically():
-    """Actualizar el estado del bot periódicamente"""
+    """Update bot status periodically"""
     while True:
         await asyncio.sleep(30)
         update_bot_status('online', len(bot.guilds), len(bot.users), get_command_count())
@@ -71,72 +71,65 @@ async def update_status_periodically():
         await bot.change_presence(
             activity=discord.Activity(
                 type=discord.ActivityType.watching,
-                name=f"{len(bot.guilds)} servidores | !help"
+                name=f"{len(bot.guilds)} servers | !help"
             )
         )
 
 @bot.event
 async def on_command_error(ctx, error):
-    """Manejo global de errores de comandos"""
+    """Global command error handler"""
     if isinstance(error, commands.CommandNotFound):
         return
     elif isinstance(error, commands.CommandOnCooldown):
-        await ctx.send(f"⏰ Espera {round(error.retry_after, 1)}s para usar este comando.")
+        await ctx.send(f"⏰ Wait {round(error.retry_after, 1)}s to use this command.")
     elif isinstance(error, commands.MissingPermissions):
-        await ctx.send("❌ No tienes permisos para usar este comando.")
+        await ctx.send("❌ You don't have permission to use this command.")
     elif isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send(f"❌ Falta un argumento: `{error.param.name}`")
+        await ctx.send(f"❌ Missing argument: `{error.param.name}`")
     elif isinstance(error, commands.BadArgument):
-        await ctx.send("❌ Argumento inválido.")
+        await ctx.send("❌ Invalid argument.")
     else:
-        logger.error(f"Error en comando {ctx.command}: {error}")
+        logger.error(f"Error in command {ctx.command}: {error}")
 
 @bot.event
 async def on_guild_join(guild):
-    """Cuando el bot se une a un servidor"""
-    logger.info(f"Nuevo servidor: {guild.name} ({guild.member_count} miembros)")
+    """When bot joins a server"""
+    logger.info(f"New server: {guild.name} ({guild.member_count} members)")
     update_bot_status('online', len(bot.guilds), len(bot.users), get_command_count())
 
 @bot.event
 async def on_guild_remove(guild):
-    """Cuando el bot es removido de un servidor"""
-    logger.info(f"Servidor removido: {guild.name}")
+    """When bot leaves a server"""
+    logger.info(f"Left server: {guild.name}")
     update_bot_status('online', len(bot.guilds), len(bot.users), get_command_count())
 
-# Cargar extensiones
+# Load extensions
 async def load_extensions():
     extensions = ['commands', 'moderation', 'music', 'levels', 'games', 'giveaways', 'tickets', 'owner']
     for ext in extensions:
         try:
             await bot.load_extension(ext)
-            logger.info(f"✅ Extensión cargada: {ext}")
+            logger.info(f"✅ Extension loaded: {ext}")
         except Exception as e:
-            logger.error(f"❌ Error cargando {ext}: {e}")
+            logger.error(f"❌ Error loading {ext}: {e}")
 
 async def setup_hook():
     await load_extensions()
 
 async def main():
     bot.setup_hook = setup_hook
-
-    # Iniciar el servidor API en un hilo separado
+    
+    # Start API server in separate thread
     api_thread = threading.Thread(target=run_api_server, daemon=True)
     api_thread.start()
-    logger.info("Servidor API iniciado en puerto 3001")
-
-    # Iniciar el bot
-    async with bot:
-        await bot.start(config.DISCORD_TOKEN)
+    logger.info("API server started on port 3001")
+    
+    # Start bot
+    logger.info("=" * 50)
+    logger.info("Starting Rez Bot v2.0 - Liquid Black Edition")
+    logger.info("=" * 50)
+    
+    await bot.start(config.DISCORD_TOKEN)
 
 if __name__ == "__main__":
-    try:
-        config.validate()
-        logger.info("=" * 50)
-        logger.info("Iniciando Rez Bot v2.0 - Liquid Black Edition")
-        logger.info("=" * 50)
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        logger.info("Bot detenido manualmente")
-    except Exception as e:
-        logger.error(f"Error al iniciar el bot: {e}")
-        sys.exit(1)
+    asyncio.run(main())

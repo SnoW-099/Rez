@@ -1,106 +1,94 @@
-// api.js - Funciones de API para comunicarse con el backend
+// api.js - API functions to communicate with the backend
 
 import axios from 'axios';
 import { API_CONFIG } from './config';
 
-// Configurar instancia de axios con la URL base
+// Configure axios instance with base URL
 const api = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   timeout: 5000,
 });
 
-// Obtener el estado del bot
+// Get bot status
 export const getBotStatus = async () => {
   try {
     const response = await api.get('/status');
     return response.data;
   } catch (error) {
-    console.error('Error al obtener el estado del bot:', error);
+    console.error('Error getting bot status:', error);
     throw error;
   }
 };
 
-// Obtener estadísticas del bot
+// Get bot statistics
 export const getBotStats = async () => {
   try {
     const response = await api.get('/stats');
     return response.data;
   } catch (error) {
-    console.error('Error al obtener las estadísticas del bot:', error);
+    console.error('Error getting bot stats:', error);
     throw error;
   }
 };
 
-// Obtener lista de comandos desde la API
+// Get command list from API
 export const getCommands = async () => {
   try {
     const response = await api.get('/commands');
     return response.data;
   } catch (error) {
-    console.error('Error al obtener comandos:', error);
-    // Fallback con todos los comandos
+    console.error('Error getting commands:', error);
+    // Fallback with all current commands
     return [
-      // ========== UTILIDAD ==========
-      { name: '!help', description: 'Muestra todos los comandos', category: 'Utilidad', role: 'usuario' },
-      { name: '!ping', description: 'Verifica la latencia del bot', category: 'Utilidad', role: 'usuario' },
+      // Utility
+      { name: '!help', description: 'Shows all commands', category: 'Utility', role: 'user' },
+      { name: '!ping', description: 'Check bot latency', category: 'Utility', role: 'user' },
 
-      // ========== ECONOMÍA ==========
-      { name: '!profile [@user]', description: 'Tu perfil completo con stats', category: 'Economía', role: 'usuario' },
-      { name: '!balance [@user]', description: 'Consulta tu saldo', category: 'Economía', role: 'usuario' },
-      { name: '!work', description: 'Trabaja y gana $50-200 (3min cd)', category: 'Economía', role: 'usuario' },
-      { name: '!daily', description: 'Recompensa diaria $200-500 (24h cd)', category: 'Economía', role: 'usuario' },
-      { name: '!transfer @user $', description: 'Transferir dinero a otro usuario', category: 'Economía', role: 'usuario' },
-      { name: '!rob @user', description: 'Intenta robar (50% éxito)', category: 'Economía', role: 'usuario' },
-      { name: '!ranking', description: 'Top 5 usuarios más ricos', category: 'Economía', role: 'usuario' },
-      { name: '!shop', description: 'Ver tienda de items', category: 'Economía', role: 'usuario' },
-      { name: '!buy [item]', description: 'Compra un item de la tienda', category: 'Economía', role: 'usuario' },
+      // Economy
+      { name: '!profile [@user]', description: 'Your complete profile', category: 'Economy', role: 'user' },
+      { name: '!balance [@user]', description: 'Check your balance', category: 'Economy', role: 'user' },
+      { name: '!work', description: 'Work and earn $50-200 (3min cd)', category: 'Economy', role: 'user' },
+      { name: '!daily', description: 'Daily reward $200-500', category: 'Economy', role: 'user' },
+      { name: '!transfer @user $', description: 'Transfer money', category: 'Economy', role: 'user' },
+      { name: '!rob @user', description: 'Rob (50% success)', category: 'Economy', role: 'user' },
+      { name: '!ranking', description: 'Top 5 richest', category: 'Economy', role: 'user' },
+      { name: '!shop', description: 'Item shop', category: 'Economy', role: 'user' },
+      { name: '!buy [item]', description: 'Buy an item', category: 'Economy', role: 'user' },
 
-      // ========== NIVELES ==========
-      { name: '!level [@user]', description: 'Ver nivel y XP actual', category: 'Niveles', role: 'usuario' },
-      { name: '!leaderboard', description: 'Top 10 por XP', category: 'Niveles', role: 'usuario' },
+      // Levels
+      { name: '!level [@user]', description: 'View level and XP', category: 'Levels', role: 'user' },
+      { name: '!leaderboard', description: 'Top 10 by XP', category: 'Levels', role: 'user' },
 
-      // ========== CASINO ==========
-      { name: '!coinflip $ cara/cruz', description: 'Apuesta cara o cruz (x2)', category: 'Casino', role: 'usuario' },
-      { name: '!slots $', description: 'Máquina tragamonedas', category: 'Casino', role: 'usuario' },
-      { name: '!blackjack $', description: 'Juega al 21 (!hit/!stand)', category: 'Casino', role: 'usuario' },
-      { name: '!roulette $ color/num', description: 'Ruleta (red/black/green/0-36)', category: 'Casino', role: 'usuario' },
-      { name: '!hit', description: 'Pide carta en Blackjack', category: 'Casino', role: 'usuario' },
-      { name: '!stand', description: 'Plantarte en Blackjack', category: 'Casino', role: 'usuario' },
+      // Casino
+      { name: '!coinflip $ heads/tails', description: 'Bet heads or tails', category: 'Casino', role: 'user' },
+      { name: '!slots $', description: 'Slot machine', category: 'Casino', role: 'user' },
+      { name: '!blackjack $', description: 'Play 21', category: 'Casino', role: 'user' },
+      { name: '!roulette $ color/num', description: 'Casino roulette', category: 'Casino', role: 'user' },
 
-      // ========== SORTEOS ==========
-      { name: '!giveaway [tiempo] [premio]', description: 'Crear sorteo (ej: 1h iPhone)', category: 'Sorteos', role: 'admin' },
-      { name: '!gend [id]', description: 'Terminar sorteo manualmente', category: 'Sorteos', role: 'admin' },
-      { name: '!greroll [id]', description: 'Volver a sortear ganador', category: 'Sorteos', role: 'admin' },
+      // Giveaways
+      { name: '!giveaway [time] [prize]', description: 'Create giveaway', category: 'Giveaways', role: 'admin' },
+      { name: '!gend', description: 'End giveaway', category: 'Giveaways', role: 'admin' },
+      { name: '!greroll [id]', description: 'Reroll winner', category: 'Giveaways', role: 'admin' },
 
-      // ========== TICKETS ==========
-      { name: '!ticket [razón]', description: 'Crear ticket de soporte', category: 'Tickets', role: 'usuario' },
-      { name: '!close', description: 'Cerrar ticket actual', category: 'Tickets', role: 'usuario' },
-      { name: '!adduser @user', description: 'Añadir usuario al ticket', category: 'Tickets', role: 'admin' },
-      { name: '!removeuser @user', description: 'Quitar usuario del ticket', category: 'Tickets', role: 'admin' },
+      // Tickets
+      { name: '!ticket [reason]', description: 'Create support ticket', category: 'Tickets', role: 'user' },
+      { name: '!close', description: 'Close current ticket', category: 'Tickets', role: 'user' },
 
-      // ========== MODERACIÓN ==========
-      { name: '!warn @user [razón]', description: 'Advertir usuario (3 warns = kick)', category: 'Moderación', role: 'admin' },
-      { name: '!mute @user [tiempo]', description: 'Silenciar (ej: 10m, 1h, 1d)', category: 'Moderación', role: 'admin' },
-      { name: '!unmute @user', description: 'Quitar silencio a usuario', category: 'Moderación', role: 'admin' },
-      { name: '!kick @user [razón]', description: 'Expulsar del servidor', category: 'Moderación', role: 'admin' },
-      { name: '!ban @user [razón]', description: 'Banear permanentemente', category: 'Moderación', role: 'admin' },
-      { name: '!unban [id]', description: 'Desbanear por ID de usuario', category: 'Moderación', role: 'admin' },
-      { name: '!clear [1-100]', description: 'Elimina mensajes del canal', category: 'Moderación', role: 'admin' },
-      { name: '!slowmode [segundos]', description: 'Modo lento del canal (0 = off)', category: 'Moderación', role: 'admin' },
-      { name: '!reset_warnings @user', description: 'Reiniciar warns de usuario', category: 'Moderación', role: 'admin' },
+      // Moderation
+      { name: '!warn @user', description: 'Warn (3 = kick)', category: 'Moderation', role: 'admin' },
+      { name: '!mute @user [time]', description: 'Mute user', category: 'Moderation', role: 'admin' },
+      { name: '!kick @user', description: 'Kick from server', category: 'Moderation', role: 'admin' },
+      { name: '!ban @user', description: 'Permanent ban', category: 'Moderation', role: 'admin' },
+      { name: '!clear [1-100]', description: 'Delete messages', category: 'Moderation', role: 'admin' },
+      { name: '!slowmode [sec]', description: 'Slowmode', category: 'Moderation', role: 'admin' },
 
-      // ========== OWNER ==========
-      { name: '!addmoney @user $', description: 'Dar dinero a usuario', category: 'Owner', role: 'owner' },
-      { name: '!removemoney @user $', description: 'Quitar dinero a usuario', category: 'Owner', role: 'owner' },
-      { name: '!setbalance @user $', description: 'Establecer balance exacto', category: 'Owner', role: 'owner' },
-      { name: '!setlevel @user nivel', description: 'Establecer nivel de usuario', category: 'Owner', role: 'owner' },
-      { name: '!resetuser @user', description: 'Reiniciar todos los datos', category: 'Owner', role: 'owner' },
-      { name: '!botstat', description: 'Estadísticas detalladas del bot', category: 'Owner', role: 'owner' },
-
-      // ========== MÚSICA ==========
-      { name: '!play [canción]', description: 'Reproduce música', category: 'Música', role: 'usuario' },
-      { name: '!join', description: 'Entra al canal de voz', category: 'Música', role: 'usuario' },
-      { name: '!leave', description: 'Sale del canal de voz', category: 'Música', role: 'usuario' },
+      // Owner
+      { name: '!addmoney @user $', description: 'Give money to user', category: 'Owner', role: 'owner' },
+      { name: '!removemoney @user $', description: 'Remove money from user', category: 'Owner', role: 'owner' },
+      { name: '!setbalance @user $', description: 'Set exact balance', category: 'Owner', role: 'owner' },
+      { name: '!setlevel @user level', description: 'Set user level', category: 'Owner', role: 'owner' },
+      { name: '!resetuser @user', description: 'Reset all data', category: 'Owner', role: 'owner' },
+      { name: '!botstat', description: 'Detailed bot statistics', category: 'Owner', role: 'owner' },
     ];
   }
 };

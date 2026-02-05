@@ -6,17 +6,17 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# ID del owner del bot
+# Bot owner ID
 OWNER_ID = 972405071902023711  # .snow_xd
 
 def is_owner():
-    """Check si el usuario es el owner del bot"""
+    """Check if user is the bot owner"""
     async def predicate(ctx):
         return ctx.author.id == OWNER_ID
     return commands.check(predicate)
 
 class OwnerCog(commands.Cog):
-    """Comandos exclusivos para el owner del bot"""
+    """Owner-only commands"""
     
     def __init__(self, bot):
         self.bot = bot
@@ -25,60 +25,59 @@ class OwnerCog(commands.Cog):
     @commands.command(name='addmoney', aliases=['addbal', 'givemoney'])
     @is_owner()
     async def add_money(self, ctx, member: discord.Member, amount: int):
-        """[OWNER] Añade dinero a un usuario"""
+        """[OWNER] Add money to a user"""
         increment_command_count()
         
         if amount <= 0:
-            await ctx.send("❌ La cantidad debe ser positiva.")
+            await ctx.send("❌ Amount must be positive.")
             return
         
         self.bank.add_money(member.id, amount)
         
         embed = discord.Embed(
-            title="💰 Dinero Añadido",
+            title="💰 Money Added",
             color=0x10b981
         )
-        embed.add_field(name="Usuario", value=member.mention, inline=True)
-        embed.add_field(name="Cantidad", value=f"+${amount:,}", inline=True)
-        embed.add_field(name="Por", value=ctx.author.mention, inline=True)
+        embed.add_field(name="User", value=member.mention, inline=True)
+        embed.add_field(name="Amount", value=f"+${amount:,}", inline=True)
+        embed.add_field(name="By", value=ctx.author.mention, inline=True)
         
         await ctx.send(embed=embed)
-        logger.info(f"[OWNER] {ctx.author} añadió ${amount} a {member}")
+        logger.info(f"[OWNER] {ctx.author} added ${amount} to {member}")
 
     @commands.command(name='removemoney', aliases=['removebal', 'takemoney'])
     @is_owner()
     async def remove_money(self, ctx, member: discord.Member, amount: int):
-        """[OWNER] Quita dinero a un usuario"""
+        """[OWNER] Remove money from a user"""
         increment_command_count()
         
         if amount <= 0:
-            await ctx.send("❌ La cantidad debe ser positiva.")
+            await ctx.send("❌ Amount must be positive.")
             return
         
         actual_removed = self.bank.remove_money(member.id, amount)
         
         embed = discord.Embed(
-            title="💸 Dinero Quitado",
+            title="💸 Money Removed",
             color=0xef4444
         )
-        embed.add_field(name="Usuario", value=member.mention, inline=True)
-        embed.add_field(name="Cantidad", value=f"-${actual_removed:,}", inline=True)
-        embed.add_field(name="Por", value=ctx.author.mention, inline=True)
+        embed.add_field(name="User", value=member.mention, inline=True)
+        embed.add_field(name="Amount", value=f"-${actual_removed:,}", inline=True)
+        embed.add_field(name="By", value=ctx.author.mention, inline=True)
         
         await ctx.send(embed=embed)
-        logger.info(f"[OWNER] {ctx.author} quitó ${actual_removed} a {member}")
+        logger.info(f"[OWNER] {ctx.author} removed ${actual_removed} from {member}")
 
     @commands.command(name='setlevel')
     @is_owner()
     async def set_level(self, ctx, member: discord.Member, level: int):
-        """[OWNER] Establece el nivel de un usuario"""
+        """[OWNER] Set a user's level"""
         increment_command_count()
         
         if level < 0:
-            await ctx.send("❌ El nivel no puede ser negativo.")
+            await ctx.send("❌ Level cannot be negative.")
             return
         
-        # Calcular XP necesario para ese nivel
         xp_needed = self.bank.xp_for_level(level)
         
         self.bank.db.users.update_one(
@@ -87,37 +86,37 @@ class OwnerCog(commands.Cog):
         )
         
         embed = discord.Embed(
-            title="⭐ Nivel Establecido",
+            title="⭐ Level Set",
             color=0x8b5cf6
         )
-        embed.add_field(name="Usuario", value=member.mention, inline=True)
-        embed.add_field(name="Nuevo Nivel", value=str(level), inline=True)
+        embed.add_field(name="User", value=member.mention, inline=True)
+        embed.add_field(name="New Level", value=str(level), inline=True)
         embed.add_field(name="XP", value=f"{xp_needed:,}", inline=True)
         
         await ctx.send(embed=embed)
-        logger.info(f"[OWNER] {ctx.author} estableció nivel {level} a {member}")
+        logger.info(f"[OWNER] {ctx.author} set level {level} for {member}")
 
     @commands.command(name='resetuser')
     @is_owner()
     async def reset_user(self, ctx, member: discord.Member):
-        """[OWNER] Reinicia todos los datos de un usuario"""
+        """[OWNER] Reset all user data"""
         increment_command_count()
         
         self.bank.db.users.delete_one({'user_id': str(member.id)})
         
         embed = discord.Embed(
-            title="🔄 Usuario Reiniciado",
-            description=f"Todos los datos de {member.mention} han sido eliminados.",
+            title="🔄 User Reset",
+            description=f"All data for {member.mention} has been deleted.",
             color=0xf59e0b
         )
         
         await ctx.send(embed=embed)
-        logger.info(f"[OWNER] {ctx.author} reinició a {member}")
+        logger.info(f"[OWNER] {ctx.author} reset {member}")
 
     @commands.command(name='setbalance', aliases=['setbal'])
     @is_owner()
     async def set_balance(self, ctx, member: discord.Member, amount: int):
-        """[OWNER] Establece el balance exacto de un usuario"""
+        """[OWNER] Set a user's exact balance"""
         increment_command_count()
         
         self.bank.db.users.update_one(
@@ -127,38 +126,36 @@ class OwnerCog(commands.Cog):
         )
         
         embed = discord.Embed(
-            title="💵 Balance Establecido",
+            title="💵 Balance Set",
             color=0x10b981
         )
-        embed.add_field(name="Usuario", value=member.mention, inline=True)
-        embed.add_field(name="Nuevo Balance", value=f"${amount:,}", inline=True)
+        embed.add_field(name="User", value=member.mention, inline=True)
+        embed.add_field(name="New Balance", value=f"${amount:,}", inline=True)
         
         await ctx.send(embed=embed)
-        logger.info(f"[OWNER] {ctx.author} estableció balance ${amount} a {member}")
+        logger.info(f"[OWNER] {ctx.author} set balance ${amount} for {member}")
 
     @commands.command(name='botstat')
     @is_owner()
     async def botstats(self, ctx):
-        """[OWNER] Muestra estadísticas detalladas del bot"""
+        """[OWNER] Show detailed bot statistics"""
         increment_command_count()
         
         embed = discord.Embed(
-            title="📊 Estadísticas del Bot",
+            title="📊 Bot Statistics",
             color=0x5865F2
         )
-        embed.add_field(name="Servidores", value=len(self.bot.guilds), inline=True)
-        embed.add_field(name="Usuarios", value=len(self.bot.users), inline=True)
-        embed.add_field(name="Latencia", value=f"{round(self.bot.latency * 1000)}ms", inline=True)
+        embed.add_field(name="Servers", value=len(self.bot.guilds), inline=True)
+        embed.add_field(name="Users", value=len(self.bot.users), inline=True)
+        embed.add_field(name="Latency", value=f"{round(self.bot.latency * 1000)}ms", inline=True)
         
-        # Stats de MongoDB
         stats = self.bank.get_stats()
-        embed.add_field(name="Usuarios en DB", value=stats.get('total_users', 0), inline=True)
-        embed.add_field(name="Total Monedas", value=f"${stats.get('total_coins', 0):,}", inline=True)
-        embed.add_field(name="XP Total", value=f"{stats.get('total_xp', 0):,}", inline=True)
+        embed.add_field(name="DB Users", value=stats.get('total_users', 0), inline=True)
+        embed.add_field(name="Total Coins", value=f"${stats.get('total_coins', 0):,}", inline=True)
+        embed.add_field(name="Total XP", value=f"{stats.get('total_xp', 0):,}", inline=True)
         
         await ctx.send(embed=embed)
 
-    # Error handler para comandos de owner
     @add_money.error
     @remove_money.error
     @set_level.error
@@ -167,9 +164,9 @@ class OwnerCog(commands.Cog):
     @botstats.error
     async def owner_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send("❌ Solo el owner del bot puede usar este comando.")
+            await ctx.send("❌ Only the bot owner can use this command.")
         else:
-            logger.error(f"Error en comando owner: {error}")
+            logger.error(f"Error in owner command: {error}")
 
 async def setup(bot):
     await bot.add_cog(OwnerCog(bot))

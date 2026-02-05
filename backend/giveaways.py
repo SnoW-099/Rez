@@ -9,45 +9,44 @@ import logging
 logger = logging.getLogger(__name__)
 
 class GiveawayCog(commands.Cog):
-    """Sistema de sorteos"""
+    """Giveaway system"""
     
     def __init__(self, bot):
         self.bot = bot
         self.active_giveaways = {}
 
-    @commands.command(name='giveaway', aliases=['sorteo', 'gstart'])
+    @commands.command(name='giveaway', aliases=['gstart'])
     @commands.has_permissions(manage_guild=True)
     async def giveaway(self, ctx, duration: str, *, prize: str):
-        """Crea un sorteo. Uso: !giveaway 1h Premio Especial"""
+        """Create a giveaway. Usage: !giveaway 1h Special Prize"""
         increment_command_count()
         
-        # Parsear duración
         time_units = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400}
         unit = duration[-1].lower()
         
         if unit not in time_units:
-            await ctx.send("❌ Formato inválido. Usa: `1m`, `1h`, `1d`")
+            await ctx.send("❌ Invalid format. Use: `1m`, `1h`, `1d`")
             return
         
         try:
             amount = int(duration[:-1])
         except ValueError:
-            await ctx.send("❌ Duración inválida.")
+            await ctx.send("❌ Invalid duration.")
             return
         
         seconds = amount * time_units[unit]
-        if seconds > 604800:  # 7 días máximo
-            await ctx.send("❌ Máximo 7 días.")
+        if seconds > 604800:
+            await ctx.send("❌ Maximum 7 days.")
             return
         
         end_time = datetime.utcnow() + timedelta(seconds=seconds)
         
         embed = discord.Embed(
-            title="🎉 SORTEO 🎉",
-            description=f"**Premio:** {prize}\n\nReacciona con 🎁 para participar!",
+            title="🎉 GIVEAWAY 🎉",
+            description=f"**Prize:** {prize}\n\nReact with 🎁 to enter!",
             color=0x10b981
         )
-        embed.add_field(name="Termina en", value=f"<t:{int(end_time.timestamp())}:R>", inline=True)
+        embed.add_field(name="Ends in", value=f"<t:{int(end_time.timestamp())}:R>", inline=True)
         embed.add_field(name="Host", value=ctx.author.mention, inline=True)
         embed.set_footer(text=f"ID: {ctx.message.id}")
         
@@ -62,12 +61,11 @@ class GiveawayCog(commands.Cog):
             'message_id': msg.id
         }
         
-        # Esperar y terminar sorteo
         await asyncio.sleep(seconds)
         await self.end_giveaway(msg.id)
 
     async def end_giveaway(self, message_id):
-        """Termina un sorteo y elige ganador"""
+        """End a giveaway and pick winner"""
         if message_id not in self.active_giveaways:
             return
         
@@ -77,7 +75,6 @@ class GiveawayCog(commands.Cog):
             channel = self.bot.get_channel(giveaway['channel_id'])
             message = await channel.fetch_message(message_id)
             
-            # Obtener participantes
             users = []
             for reaction in message.reactions:
                 if str(reaction.emoji) == "🎁":
@@ -87,8 +84,8 @@ class GiveawayCog(commands.Cog):
             
             if not users:
                 embed = discord.Embed(
-                    title="🎉 Sorteo Terminado",
-                    description="No hubo participantes 😢",
+                    title="🎉 Giveaway Ended",
+                    description="No participants 😢",
                     color=0xef4444
                 )
                 await channel.send(embed=embed)
@@ -97,42 +94,41 @@ class GiveawayCog(commands.Cog):
             winner = random.choice(users)
             
             embed = discord.Embed(
-                title="🎉 ¡Tenemos un Ganador!",
-                description=f"**Premio:** {giveaway['prize']}\n\n🏆 **Ganador:** {winner.mention}",
+                title="🎉 We Have a Winner!",
+                description=f"**Prize:** {giveaway['prize']}\n\n🏆 **Winner:** {winner.mention}",
                 color=0x10b981
             )
             embed.set_thumbnail(url=winner.avatar.url if winner.avatar else winner.default_avatar.url)
             
-            await channel.send(f"🎊 Felicidades {winner.mention}!", embed=embed)
-            logger.info(f"Sorteo terminado: {winner} ganó '{giveaway['prize']}'")
+            await channel.send(f"🎊 Congratulations {winner.mention}!", embed=embed)
+            logger.info(f"Giveaway ended: {winner} won '{giveaway['prize']}'")
             
         except Exception as e:
-            logger.error(f"Error terminando sorteo: {e}")
+            logger.error(f"Error ending giveaway: {e}")
 
     @commands.command(name='gend', aliases=['endgiveaway'])
     @commands.has_permissions(manage_guild=True)
     async def giveaway_end(self, ctx, message_id: int = None):
-        """Termina un sorteo manualmente"""
+        """End a giveaway manually"""
         increment_command_count()
         
         if message_id is None:
-            # Buscar el último sorteo activo
             if not self.active_giveaways:
-                await ctx.send("❌ No hay sorteos activos.")
+                await ctx.send("❌ No active giveaways.")
                 return
             message_id = list(self.active_giveaways.keys())[-1]
         
         if message_id not in self.active_giveaways:
-            await ctx.send("❌ Sorteo no encontrado.")
+            await ctx.send("❌ Giveaway not found.")
             return
         
         await self.end_giveaway(message_id)
-        await ctx.send("✅ Sorteo terminado!")
+        await ctx.send("✅ Giveaway ended!")
 
     @commands.command(name='greroll', aliases=['reroll'])
     @commands.has_permissions(manage_guild=True)
     async def giveaway_reroll(self, ctx, message_id: int):
-        """Vuelve a sortear un ganador"""
+        """Reroll a giveaway winner"""
         increment_command_count()
         
         try:
@@ -146,14 +142,14 @@ class GiveawayCog(commands.Cog):
                             users.append(user)
             
             if not users:
-                await ctx.send("❌ No hay participantes.")
+                await ctx.send("❌ No participants.")
                 return
             
             winner = random.choice(users)
-            await ctx.send(f"🎊 ¡Nuevo ganador: {winner.mention}!")
+            await ctx.send(f"🎊 New winner: {winner.mention}!")
             
         except discord.NotFound:
-            await ctx.send("❌ Mensaje no encontrado.")
+            await ctx.send("❌ Message not found.")
 
 async def setup(bot):
     await bot.add_cog(GiveawayCog(bot))

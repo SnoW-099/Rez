@@ -12,7 +12,7 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='profile')
     async def profile(self, ctx, member: discord.Member = None):
-        """Muestra el perfil de un usuario"""
+        """Shows a user's profile"""
         increment_command_count()
         if member is None:
             member = ctx.author
@@ -20,41 +20,38 @@ class CommandsCog(commands.Cog):
         user_data = self.bank.get_user_data(member.id)
         
         embed = discord.Embed(
-            title=f"👤 Perfil de {member.display_name}",
-            color=0x5865F2  # Discord blurple
+            title=f"👤 {member.display_name}'s Profile",
+            color=0x5865F2
         )
         embed.set_thumbnail(url=member.avatar.url if member.avatar else member.default_avatar.url)
         
-        # Economía
+        # Economy
         embed.add_field(name="💰 Balance", value=f"${user_data['balance']:,}", inline=True)
-        embed.add_field(name="📊 Total Ganado", value=f"${user_data.get('total_earned', 0):,}", inline=True)
-        embed.add_field(name="💸 Total Gastado", value=f"${user_data.get('total_spent', 0):,}", inline=True)
+        embed.add_field(name="📊 Total Earned", value=f"${user_data.get('total_earned', 0):,}", inline=True)
+        embed.add_field(name="💸 Total Spent", value=f"${user_data.get('total_spent', 0):,}", inline=True)
         
-        # XP y Nivel
+        # XP and Level
         level = user_data.get('level', 0)
         xp = user_data.get('xp', 0)
         next_level_xp = self.bank.xp_for_level(level + 1)
-        current_level_xp = self.bank.xp_for_level(level)
-        progress = xp - current_level_xp
-        needed = next_level_xp - current_level_xp
         
-        embed.add_field(name="⭐ Nivel", value=str(level), inline=True)
+        embed.add_field(name="⭐ Level", value=str(level), inline=True)
         embed.add_field(name="✨ XP", value=f"{xp:,} / {next_level_xp:,}", inline=True)
-        embed.add_field(name="💬 Mensajes", value=f"{user_data.get('messages', 0):,}", inline=True)
+        embed.add_field(name="💬 Messages", value=f"{user_data.get('messages', 0):,}", inline=True)
         
-        # Moderación
-        embed.add_field(name="⚠️ Advertencias", value=str(user_data['warnings']), inline=True)
+        # Moderation
+        embed.add_field(name="⚠️ Warnings", value=str(user_data['warnings']), inline=True)
         
         embed.set_footer(text=f"ID: {member.id}")
         await ctx.send(embed=embed)
 
     @commands.command(name='ranking')
     async def ranking(self, ctx):
-        """Muestra el top 5 de usuarios más ricos"""
+        """Shows top 5 richest users"""
         increment_command_count()
         top_users = self.bank.get_top_users(5)
         
-        embed = discord.Embed(title="🏆 Top 5 Usuarios Más Ricos", color=0xffd700)
+        embed = discord.Embed(title="🏆 Top 5 Richest Users", color=0xffd700)
         
         medals = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"]
         
@@ -63,7 +60,7 @@ class CommandsCog(commands.Cog):
                 user = await self.bot.fetch_user(int(user_id))
                 username = user.name
             except:
-                username = f"Usuario {user_id[:8]}..."
+                username = f"User {user_id[:8]}..."
             
             embed.add_field(
                 name=f"{medals[i]} {username}",
@@ -75,266 +72,254 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='work')
     async def work(self, ctx):
-        """Trabaja para ganar dinero (cooldown: 3 minutos)"""
+        """Work to earn money (cooldown: 3 minutes)"""
         increment_command_count()
         user_id = ctx.author.id
         
-        # Verificar cooldown persistente
         remaining = self.bank.get_cooldown(user_id, 'work')
         if remaining > 0:
             minutes = int(remaining // 60)
             seconds = int(remaining % 60)
-            await ctx.send(f"⏰ Espera **{minutes}m {seconds}s** para volver a trabajar.")
+            await ctx.send(f"⏰ Wait **{minutes}m {seconds}s** to work again.")
             return
         
-        # Trabajar y ganar dinero
         earnings = random.randint(50, 200)
         self.bank.add_money(user_id, earnings)
-        self.bank.set_cooldown(user_id, 'work', 180)  # 3 minutos
+        self.bank.set_cooldown(user_id, 'work', 180)
         
-        # Mensajes variados
         messages = [
-            f"💼 Trabajaste en la oficina y ganaste **${earnings}**!",
-            f"🏗️ Ayudaste en una construcción y te pagaron **${earnings}**!",
-            f"🍕 Repartiste pizzas y ganaste **${earnings}** en propinas!",
-            f"💻 Programaste unas horas y cobraste **${earnings}**!",
-            f"🎨 Vendiste un dibujo por **${earnings}**!"
+            f"💼 You worked at the office and earned **${earnings}**!",
+            f"🏗️ You helped at construction and got paid **${earnings}**!",
+            f"🍕 You delivered pizzas and earned **${earnings}** in tips!",
+            f"💻 You coded for a few hours and earned **${earnings}**!",
+            f"🎨 You sold a drawing for **${earnings}**!"
         ]
         
         await ctx.send(random.choice(messages))
 
     @commands.command(name='daily')
     async def daily(self, ctx):
-        """Recoge tu recompensa diaria"""
+        """Collect your daily reward"""
         increment_command_count()
         user_id = ctx.author.id
         
-        # Verificar cooldown de 24 horas
         remaining = self.bank.get_cooldown(user_id, 'daily')
         if remaining > 0:
             hours = int(remaining // 3600)
             minutes = int((remaining % 3600) // 60)
-            await ctx.send(f"⏰ Ya recogiste tu daily. Vuelve en **{hours}h {minutes}m**.")
+            await ctx.send(f"⏰ Already collected. Come back in **{hours}h {minutes}m**.")
             return
         
         reward = random.randint(200, 500)
         self.bank.add_money(user_id, reward)
-        self.bank.set_cooldown(user_id, 'daily', 86400)  # 24 horas
+        self.bank.set_cooldown(user_id, 'daily', 86400)
         
-        await ctx.send(f"🎁 ¡Recogiste tu recompensa diaria de **${reward}**!")
+        await ctx.send(f"🎁 You collected your daily reward of **${reward}**!")
 
     @commands.command(name='balance', aliases=['bal'])
     async def balance(self, ctx, member: discord.Member = None):
-        """Consulta tu saldo o el de otro usuario"""
+        """Check your balance or another user's"""
         increment_command_count()
         if member is None:
             member = ctx.author
         
         user_data = self.bank.get_user_data(member.id)
-        await ctx.send(f"💰 **{member.display_name}** tiene **${user_data['balance']:,}**")
+        await ctx.send(f"💰 **{member.display_name}** has **${user_data['balance']:,}**")
 
     @commands.command(name='transfer', aliases=['pay', 'give'])
     async def transfer(self, ctx, member: discord.Member, amount: int):
-        """Transfiere dinero a otro usuario"""
+        """Transfer money to another user"""
         increment_command_count()
         
         if member.id == ctx.author.id:
-            await ctx.send("❌ No puedes transferirte dinero a ti mismo.")
+            await ctx.send("❌ You can't transfer money to yourself.")
             return
         
         if amount <= 0:
-            await ctx.send("❌ La cantidad debe ser mayor a 0.")
+            await ctx.send("❌ Amount must be greater than 0.")
             return
         
         sender_data = self.bank.get_user_data(ctx.author.id)
         if sender_data['balance'] < amount:
-            await ctx.send("❌ No tienes suficiente dinero.")
+            await ctx.send("❌ You don't have enough money.")
             return
         
         self.bank.remove_money(ctx.author.id, amount)
         self.bank.add_money(member.id, amount)
         
-        await ctx.send(f"✅ Transferiste **${amount:,}** a **{member.display_name}**")
+        embed = discord.Embed(
+            title="💸 Transfer Complete",
+            color=0x10b981
+        )
+        embed.add_field(name="From", value=ctx.author.mention, inline=True)
+        embed.add_field(name="To", value=member.mention, inline=True)
+        embed.add_field(name="Amount", value=f"${amount:,}", inline=True)
+        
+        await ctx.send(embed=embed)
 
-    @commands.command(name='rob')
+    @commands.command(name='rob', aliases=['steal'])
     async def rob(self, ctx, member: discord.Member):
-        """Intenta robar dinero a otro usuario (50% de éxito)"""
+        """Try to rob another user (50% success)"""
         increment_command_count()
         
         if member.id == ctx.author.id:
-            await ctx.send("❌ No puedes robarte a ti mismo.")
+            await ctx.send("❌ You can't rob yourself.")
             return
         
-        # Cooldown de robo
+        if member.bot:
+            await ctx.send("❌ You can't rob bots.")
+            return
+        
         remaining = self.bank.get_cooldown(ctx.author.id, 'rob')
         if remaining > 0:
-            await ctx.send(f"⏰ Espera **{int(remaining)}s** para intentar robar de nuevo.")
+            minutes = int(remaining // 60)
+            await ctx.send(f"⏰ Wait **{minutes}m** to rob again.")
             return
-        
-        self.bank.set_cooldown(ctx.author.id, 'rob', 120)  # 2 minutos
         
         victim_data = self.bank.get_user_data(member.id)
         if victim_data['balance'] < 100:
-            await ctx.send(f"💸 **{member.display_name}** no tiene suficiente dinero para robar.")
+            await ctx.send(f"❌ **{member.display_name}** doesn't have enough money to rob.")
             return
         
-        if random.random() > 0.5:  # 50% éxito
-            stolen = min(random.randint(50, 200), victim_data['balance'])
-            self.bank.add_money(ctx.author.id, stolen)
+        self.bank.set_cooldown(ctx.author.id, 'rob', 300)
+        
+        if random.random() < 0.5:
+            stolen = random.randint(50, min(500, victim_data['balance']))
             self.bank.remove_money(member.id, stolen)
-            await ctx.send(f"💰 ¡Robo exitoso! Robaste **${stolen}** a **{member.display_name}**")
+            self.bank.add_money(ctx.author.id, stolen)
+            await ctx.send(f"💰 You robbed **${stolen}** from {member.mention}!")
         else:
-            penalty = random.randint(50, 150)
-            actual = self.bank.remove_money(ctx.author.id, penalty)
-            await ctx.send(f"👮 ¡Te atraparon! Pagaste una multa de **${actual}**")
+            fine = random.randint(50, 150)
+            self.bank.remove_money(ctx.author.id, fine)
+            await ctx.send(f"🚔 You were caught! You paid **${fine}** in fines.")
 
-    @commands.command(name='ping')
-    async def ping(self, ctx):
-        """Verifica la latencia del bot"""
-        increment_command_count()
-        latency = round(self.bot.latency * 1000)
-        
-        if latency < 100:
-            status = "🟢 Excelente"
-        elif latency < 200:
-            status = "🟡 Buena"
-        else:
-            status = "🔴 Alta"
-        
-        await ctx.send(f"🏓 Pong! **{latency}ms** ({status})")
-
-    # ============== TIENDA ==============
-
-    SHOP_ITEMS = {
-        'lucky_charm': {
-            'name': '🍀 Lucky Charm',
-            'price': 500,
-            'description': '+10% en ganancias de !work por 1 hora',
-            'type': 'boost'
-        },
-        'shield': {
-            'name': '🛡️ Protection Shield',
-            'price': 1000,
-            'description': 'Protección contra robos por 2 horas',
-            'type': 'protection'
-        },
-        'xp_boost': {
-            'name': '⚡ XP Boost',
-            'price': 750,
-            'description': '+50% XP por 30 minutos',
-            'type': 'boost'
-        },
-        'mystery_box': {
-            'name': '🎁 Mystery Box',
-            'price': 300,
-            'description': 'Contiene entre $0 y $1000 aleatorio',
-            'type': 'instant'
-        },
-        'vip_badge': {
-            'name': '👑 VIP Badge',
-            'price': 5000,
-            'description': 'Badge especial en tu perfil',
-            'type': 'cosmetic'
-        }
-    }
-
-    @commands.command(name='shop', aliases=['tienda', 'store'])
+    @commands.command(name='shop', aliases=['store', 'tienda'])
     async def shop(self, ctx):
-        """Muestra la tienda de items"""
+        """View the item shop"""
         increment_command_count()
         
         embed = discord.Embed(
-            title="🛒 Tienda de Rez",
-            description="Usa `!buy [item]` para comprar",
-            color=0x10b981
+            title="🛒 Item Shop",
+            description="Buy items with `!buy [item]`",
+            color=0x5865F2
         )
         
-        for item_id, item in self.SHOP_ITEMS.items():
+        items = [
+            ("🎣 Fishing Rod", "fishing_rod", 500, "Fish for money"),
+            ("⛏️ Pickaxe", "pickaxe", 750, "Mine for minerals"),
+            ("🎰 Lucky Coin", "lucky_coin", 1000, "+10% casino wins"),
+            ("💼 Briefcase", "briefcase", 2000, "+25% work earnings"),
+            ("🛡️ Shield", "shield", 1500, "Protection from robbers")
+        ]
+        
+        for emoji_name, item_id, price, desc in items:
             embed.add_field(
-                name=f"{item['name']} - ${item['price']:,}",
-                value=f"ID: `{item_id}`\n{item['description']}",
+                name=f"{emoji_name} - ${price:,}",
+                value=f"`!buy {item_id}`\n{desc}",
                 inline=True
             )
         
         await ctx.send(embed=embed)
 
-    @commands.command(name='buy', aliases=['comprar'])
-    async def buy(self, ctx, item_id: str = None):
-        """Compra un item de la tienda"""
+    @commands.command(name='buy', aliases=['purchase'])
+    async def buy(self, ctx, item: str = None):
+        """Buy an item from the shop"""
         increment_command_count()
         
-        if item_id is None:
-            await ctx.send("❌ Usa `!buy [item_id]`. Ver items con `!shop`")
+        if item is None:
+            await ctx.send("❌ Specify an item. Use `!shop` to see available items.")
             return
         
-        item_id = item_id.lower()
-        if item_id not in self.SHOP_ITEMS:
-            await ctx.send("❌ Item no encontrado. Usa `!shop` para ver items.")
+        items = {
+            "fishing_rod": ("🎣 Fishing Rod", 500),
+            "pickaxe": ("⛏️ Pickaxe", 750),
+            "lucky_coin": ("🎰 Lucky Coin", 1000),
+            "briefcase": ("💼 Briefcase", 2000),
+            "shield": ("🛡️ Shield", 1500)
+        }
+        
+        item = item.lower()
+        if item not in items:
+            await ctx.send("❌ Item not found. Use `!shop`.")
             return
         
-        item = self.SHOP_ITEMS[item_id]
+        name, price = items[item]
         user_data = self.bank.get_user_data(ctx.author.id)
         
-        if user_data['balance'] < item['price']:
-            await ctx.send(f"❌ Necesitas **${item['price']:,}** pero tienes **${user_data['balance']:,}**")
+        if user_data['balance'] < price:
+            await ctx.send(f"❌ You need **${price:,}** to buy this.")
             return
         
-        self.bank.remove_money(ctx.author.id, item['price'])
+        self.bank.remove_money(ctx.author.id, price)
         
-        # Procesar items especiales
-        if item_id == 'mystery_box':
-            reward = random.randint(0, 1000)
-            self.bank.add_money(ctx.author.id, reward)
-            await ctx.send(f"🎁 Abriste la Mystery Box y encontraste **${reward}**!")
-        else:
-            # Para otros items, simplemente confirmar compra
-            # En una implementación completa, guardarías el item en el inventario
-            await ctx.send(f"✅ Compraste {item['name']} por **${item['price']:,}**!")
+        embed = discord.Embed(
+            title="✅ Purchase Complete!",
+            description=f"You bought **{name}** for **${price:,}**",
+            color=0x10b981
+        )
+        await ctx.send(embed=embed)
 
-    @commands.command(name='help')
-    async def show_help(self, ctx):
-        """Muestra todos los comandos disponibles"""
+    @commands.command(name='ping')
+    async def ping(self, ctx):
+        """Check bot latency"""
+        increment_command_count()
+        latency = round(self.bot.latency * 1000)
+        await ctx.send(f"🏓 Pong! Latency: **{latency}ms**")
+
+    @commands.command(name='help', aliases=['commands', 'h'])
+    async def help_command(self, ctx):
+        """Show all available commands"""
         increment_command_count()
         
         embed = discord.Embed(
-            title="🤖 Rez Bot - Comandos",
-            description="Prefijo: `!`",
+            title="📚 Rez Bot Commands",
+            description="Use `!command` to run a command",
             color=0x5865F2
         )
         
-        # Economía
-        economy = """
-        `!profile` - Tu perfil completo
-        `!balance` - Consulta tu saldo
-        `!work` - Trabaja (cooldown: 3min)
-        `!daily` - Recompensa diaria
-        `!transfer @user $` - Transferir
-        `!rob @user` - Robar (50% éxito)
-        `!ranking` - Top 5 más ricos
-        `!shop` - Ver tienda
-        `!buy [item]` - Comprar item
-        """
-        embed.add_field(name="💰 Economía", value=economy, inline=False)
+        embed.add_field(
+            name="💰 Economy",
+            value="`profile` `balance` `work` `daily` `transfer` `rob` `ranking` `shop` `buy`",
+            inline=False
+        )
         
-        # XP
-        xp = """
-        `!level` - Ver tu nivel
-        `!leaderboard` - Top 10 XP
-        """
-        embed.add_field(name="⭐ Niveles", value=xp, inline=False)
+        embed.add_field(
+            name="⭐ Levels",
+            value="`level` `leaderboard`",
+            inline=False
+        )
         
-        # Moderación
-        mod = """
-        `!warn @user` - Advertir
-        `!mute @user [tiempo]` - Silenciar
-        `!kick @user` - Expulsar
-        `!ban @user` - Banear
-        `!clear cantidad` - Borrar mensajes
-        `!slowmode [seg]` - Modo lento
-        """
-        embed.add_field(name="🛡️ Moderación", value=mod, inline=False)
+        embed.add_field(
+            name="🎰 Casino",
+            value="`coinflip` `slots` `blackjack` `roulette`",
+            inline=False
+        )
         
-        embed.set_footer(text="Rez Bot v2.0 | Liquid Black Edition")
+        embed.add_field(
+            name="🎁 Giveaways",
+            value="`giveaway` `gend` `greroll`",
+            inline=False
+        )
+        
+        embed.add_field(
+            name="🎫 Tickets",
+            value="`ticket` `close`",
+            inline=False
+        )
+        
+        embed.add_field(
+            name="🛡️ Moderation",
+            value="`warn` `mute` `unmute` `kick` `ban` `unban` `clear` `slowmode`",
+            inline=False
+        )
+        
+        embed.add_field(
+            name="⚙️ Utility",
+            value="`ping` `help`",
+            inline=False
+        )
+        
+        embed.set_footer(text="Rez Bot v2.0 - Liquid Black Edition")
         await ctx.send(embed=embed)
 
 async def setup(bot):
