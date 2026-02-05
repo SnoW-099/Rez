@@ -164,7 +164,7 @@ class OwnerCog(commands.Cog):
     @set_level.error
     @reset_user.error
     @set_balance.error
-    @bot_stats.error
+    @botstats.error
     async def owner_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
             await ctx.send("❌ Solo el owner del bot puede usar este comando.")
