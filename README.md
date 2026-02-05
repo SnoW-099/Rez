@@ -29,9 +29,6 @@ Rez is a high-performance infrastructure for Discord, engineered with a focus on
 
 <div align="center">
 
-`STATUS: OPERATIONAL` &nbsp; `STAGE: BETA` &nbsp; `VERSION: 1.0.0`
-
-<br />
-
 DEVELOPED BY **SNOW-099**
+
 </div>
