@@ -38,49 +38,69 @@ export const getCommands = async () => {
     return response.data;
   } catch (error) {
     console.error('Error al obtener comandos:', error);
-    // Fallback con todos los comandos actuales
+    // Fallback con todos los comandos
     return [
-      // Utilidad
-      { name: '!help', description: 'Muestra todos los comandos', category: 'Utilidad' },
-      { name: '!ping', description: 'Verifica la latencia del bot', category: 'Utilidad' },
+      // ========== UTILIDAD ==========
+      { name: '!help', description: 'Muestra todos los comandos', category: 'Utilidad', role: 'usuario' },
+      { name: '!ping', description: 'Verifica la latencia del bot', category: 'Utilidad', role: 'usuario' },
 
-      // Economía
-      { name: '!profile', description: 'Tu perfil completo', category: 'Economía' },
-      { name: '!balance', description: 'Consulta tu saldo', category: 'Economía' },
-      { name: '!work', description: 'Trabaja y gana $50-200 (3min cd)', category: 'Economía' },
-      { name: '!daily', description: 'Recompensa diaria $200-500', category: 'Economía' },
-      { name: '!transfer @user $', description: 'Transferir dinero', category: 'Economía' },
-      { name: '!rob @user', description: 'Robar (50% éxito)', category: 'Economía' },
-      { name: '!ranking', description: 'Top 5 más ricos', category: 'Economía' },
-      { name: '!shop', description: 'Tienda de items', category: 'Economía' },
-      { name: '!buy [item]', description: 'Compra un item', category: 'Economía' },
+      // ========== ECONOMÍA ==========
+      { name: '!profile [@user]', description: 'Tu perfil completo con stats', category: 'Economía', role: 'usuario' },
+      { name: '!balance [@user]', description: 'Consulta tu saldo', category: 'Economía', role: 'usuario' },
+      { name: '!work', description: 'Trabaja y gana $50-200 (3min cd)', category: 'Economía', role: 'usuario' },
+      { name: '!daily', description: 'Recompensa diaria $200-500 (24h cd)', category: 'Economía', role: 'usuario' },
+      { name: '!transfer @user $', description: 'Transferir dinero a otro usuario', category: 'Economía', role: 'usuario' },
+      { name: '!rob @user', description: 'Intenta robar (50% éxito)', category: 'Economía', role: 'usuario' },
+      { name: '!ranking', description: 'Top 5 usuarios más ricos', category: 'Economía', role: 'usuario' },
+      { name: '!shop', description: 'Ver tienda de items', category: 'Economía', role: 'usuario' },
+      { name: '!buy [item]', description: 'Compra un item de la tienda', category: 'Economía', role: 'usuario' },
 
-      // Niveles
-      { name: '!level', description: 'Ver nivel y XP', category: 'Niveles' },
-      { name: '!leaderboard', description: 'Top 10 por XP', category: 'Niveles' },
+      // ========== NIVELES ==========
+      { name: '!level [@user]', description: 'Ver nivel y XP actual', category: 'Niveles', role: 'usuario' },
+      { name: '!leaderboard', description: 'Top 10 por XP', category: 'Niveles', role: 'usuario' },
 
-      // Casino
-      { name: '!coinflip $ cara/cruz', description: 'Apuesta cara o cruz', category: 'Casino' },
-      { name: '!slots $', description: 'Máquina tragamonedas', category: 'Casino' },
-      { name: '!blackjack $', description: 'Juega al 21', category: 'Casino' },
-      { name: '!roulette $ color/num', description: 'Ruleta de casino', category: 'Casino' },
+      // ========== CASINO ==========
+      { name: '!coinflip $ cara/cruz', description: 'Apuesta cara o cruz (x2)', category: 'Casino', role: 'usuario' },
+      { name: '!slots $', description: 'Máquina tragamonedas', category: 'Casino', role: 'usuario' },
+      { name: '!blackjack $', description: 'Juega al 21 (!hit/!stand)', category: 'Casino', role: 'usuario' },
+      { name: '!roulette $ color/num', description: 'Ruleta (red/black/green/0-36)', category: 'Casino', role: 'usuario' },
+      { name: '!hit', description: 'Pide carta en Blackjack', category: 'Casino', role: 'usuario' },
+      { name: '!stand', description: 'Plantarte en Blackjack', category: 'Casino', role: 'usuario' },
 
-      // Sorteos
-      { name: '!giveaway [tiempo] [premio]', description: 'Crear sorteo', category: 'Sorteos' },
-      { name: '!gend', description: 'Terminar sorteo', category: 'Sorteos' },
-      { name: '!greroll [id]', description: 'Re-sortear ganador', category: 'Sorteos' },
+      // ========== SORTEOS ==========
+      { name: '!giveaway [tiempo] [premio]', description: 'Crear sorteo (ej: 1h iPhone)', category: 'Sorteos', role: 'admin' },
+      { name: '!gend [id]', description: 'Terminar sorteo manualmente', category: 'Sorteos', role: 'admin' },
+      { name: '!greroll [id]', description: 'Volver a sortear ganador', category: 'Sorteos', role: 'admin' },
 
-      // Tickets
-      { name: '!ticket [razón]', description: 'Crear ticket de soporte', category: 'Tickets' },
-      { name: '!close', description: 'Cerrar ticket actual', category: 'Tickets' },
+      // ========== TICKETS ==========
+      { name: '!ticket [razón]', description: 'Crear ticket de soporte', category: 'Tickets', role: 'usuario' },
+      { name: '!close', description: 'Cerrar ticket actual', category: 'Tickets', role: 'usuario' },
+      { name: '!adduser @user', description: 'Añadir usuario al ticket', category: 'Tickets', role: 'admin' },
+      { name: '!removeuser @user', description: 'Quitar usuario del ticket', category: 'Tickets', role: 'admin' },
 
-      // Moderación
-      { name: '!warn @user', description: 'Advertir (3 = kick)', category: 'Moderación' },
-      { name: '!mute @user [tiempo]', description: 'Silenciar usuario', category: 'Moderación' },
-      { name: '!kick @user', description: 'Expulsar del servidor', category: 'Moderación' },
-      { name: '!ban @user', description: 'Banear permanente', category: 'Moderación' },
-      { name: '!clear [1-100]', description: 'Elimina mensajes', category: 'Moderación' },
-      { name: '!slowmode [seg]', description: 'Modo lento', category: 'Moderación' },
+      // ========== MODERACIÓN ==========
+      { name: '!warn @user [razón]', description: 'Advertir usuario (3 warns = kick)', category: 'Moderación', role: 'admin' },
+      { name: '!mute @user [tiempo]', description: 'Silenciar (ej: 10m, 1h, 1d)', category: 'Moderación', role: 'admin' },
+      { name: '!unmute @user', description: 'Quitar silencio a usuario', category: 'Moderación', role: 'admin' },
+      { name: '!kick @user [razón]', description: 'Expulsar del servidor', category: 'Moderación', role: 'admin' },
+      { name: '!ban @user [razón]', description: 'Banear permanentemente', category: 'Moderación', role: 'admin' },
+      { name: '!unban [id]', description: 'Desbanear por ID de usuario', category: 'Moderación', role: 'admin' },
+      { name: '!clear [1-100]', description: 'Elimina mensajes del canal', category: 'Moderación', role: 'admin' },
+      { name: '!slowmode [segundos]', description: 'Modo lento del canal (0 = off)', category: 'Moderación', role: 'admin' },
+      { name: '!reset_warnings @user', description: 'Reiniciar warns de usuario', category: 'Moderación', role: 'admin' },
+
+      // ========== OWNER ==========
+      { name: '!addmoney @user $', description: 'Dar dinero a usuario', category: 'Owner', role: 'owner' },
+      { name: '!removemoney @user $', description: 'Quitar dinero a usuario', category: 'Owner', role: 'owner' },
+      { name: '!setbalance @user $', description: 'Establecer balance exacto', category: 'Owner', role: 'owner' },
+      { name: '!setlevel @user nivel', description: 'Establecer nivel de usuario', category: 'Owner', role: 'owner' },
+      { name: '!resetuser @user', description: 'Reiniciar todos los datos', category: 'Owner', role: 'owner' },
+      { name: '!botstat', description: 'Estadísticas detalladas del bot', category: 'Owner', role: 'owner' },
+
+      // ========== MÚSICA ==========
+      { name: '!play [canción]', description: 'Reproduce música', category: 'Música', role: 'usuario' },
+      { name: '!join', description: 'Entra al canal de voz', category: 'Música', role: 'usuario' },
+      { name: '!leave', description: 'Sale del canal de voz', category: 'Música', role: 'usuario' },
     ];
   }
 };
