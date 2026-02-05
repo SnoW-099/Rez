@@ -6,8 +6,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# ID del owner del bot - cámbialo por tu ID de Discord
-OWNER_ID = 465120268996444375  # Tu ID de Discord
+# ID del owner del bot
+OWNER_ID = 972405071902023711  # .snow_xd
 
 def is_owner():
     """Check si el usuario es el owner del bot"""
