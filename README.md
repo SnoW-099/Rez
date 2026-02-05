@@ -1,45 +1,37 @@
 <div align="center">
 
-<img src="https://rez-bot.netlify.app/logo.png" width="120" style="filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));" />
+<img src="https://rez-bot.netlify.app/logo.png" width="160" alt="REZ LOGO" />
 
 # 🌌 REZ
-`L I Q U I D · B L A C K · A E S T H E T I C`
+`L I Q U I D · B L A C K · S Y S T E M`
+
+[**DASHBOARD**](https://rez-bot.netlify.app/) • [**COMMANDS**](https://rez-bot.netlify.app/) • [**UPDATES**](https://rez-bot.netlify.app/)
 
 ---
 
 ### ⚡ THE VISION
-**Rez no es un bot, es una experiencia.**
-Hemos fusionado el backend más sólido de Python con una interfaz inspirada en el minimalismo de Apple.
+> "No es un bot, es una experiencia de ingeniería."
 
-[**ENTER THE DASHBOARD**](https://rez-bot.netlify.app/)
+Rez fusiona un backend de alto rendimiento en **Python** con una interfaz **Bento-Grid** inspirada en el minimalismo de Apple. Diseño líquido, latencia cero y una estética "God Tier".
 
 ---
 
 </div>
 
-<details open>
-<summary><strong> 🛡️ SECURITY & POWER</strong></summary>
-<br />
-<blockquote>"Seguridad nivel Dios, estética nivel Apple."</blockquote>
+### 🛠️ CORE SPECIFICATIONS
+* **Architecture:** Estructura modular para escalabilidad total.
+* **Visuals:** Tilt 3D, cursor personalizado y animaciones cinemáticas.
+* **Infrastructure:** Cloud-hosted 24/7. Sin instalaciones, sin fricción.
 
-* **Auto-Mod:** Filtro de invitaciones inteligente y sistema de warns persistentes.
-* **High Performance:** Ejecución modular diseñada para latencia cero.
-* **Global Ranking:** Compite en la Rich List y domina la economía de tu comunidad.
-</details>
-
-<details open>
-<summary><strong> 🕹️ QUICK START</strong></summary>
-<br />
-
-1.  **Invite:** Dale al botón en la [Web Oficial](https://rez-bot.netlify.app/).
-2.  **Execute:** Usa `!profile` para iniciar tu viaje.
-3.  **Dominate:** Gestiona todo desde el panel Liquid Black.
-</details>
+### 🛡️ SECURITY & ECONOMY
+* **Automod:** Filtro de spam inteligente y sistema de advertencias persistentes.
+* **Persistence:** Motor de datos JSON con guardado en tiempo real para evitar pérdidas.
+* **Competition:** Ranking global de economía diseñado para maximizar el engagement.
 
 ---
 
 <div align="center">
-  <sub>Crafted with obsession by <strong>Snow099</strong></sub>
+  <sub><strong>CRAFTED BY SNOW099</strong></sub>
   <br />
-  <code>[ SYSTEM STATUS: ONLINE ]</code>
+  <code>[ STATUS: OPERATIONAL ]</code>
 </div>
