@@ -1,35 +1,37 @@
 <div align="center">
 
-<img src="https://rez-bot.netlify.app/logo.png" width="140" alt="REZ" />
-
 # REZ
-`L I Q U I D · B L A C K · I N T E R F A C E`
+`L I Q U I D · B L A C K · S Y S T E M`
 
 ---
 
-[**DASHBOARD**](https://rez-bot.netlify.app/) &nbsp; • &nbsp; [**UPDATES**](https://rez-bot.netlify.app/updates) &nbsp; • &nbsp; [**PORTFOLIO**](https://portfolio-snow.netlify.app/)
+[**DASHBOARD**](https://rez-bot.netlify.app/) &nbsp; • &nbsp; [**UPDATES**](https://rez-bot.netlify.app/) &nbsp; • &nbsp; [**PORTFOLIO**](https://portfolio-snow.netlify.app/)
 
 ---
 
 </div>
 
-### 🌌 Concepto
-Rez es una infraestructura de servicios para Discord diseñada bajo los estándares de **minimalismo agresivo** y **alto rendimiento**. No es un bot convencional; es un ecosistema con interfaz **Liquid Black**.
+### SYSTEM OVERVIEW
+Rez is a high-performance infrastructure for Discord, engineered with a focus on absolute minimalism and technical efficiency. The system operates on a **Liquid Black** architecture, prioritizing low-latency response times and a seamless user experience.
 
-### 🛠️ Especificaciones de Ingeniería
-* **Backend:** Arquitectura modular en Python optimizada para baja latencia.
-* **Frontend:** Dashboard SPA (Single Page Application) con diseño Bento-Grid.
-* **Experiencia:** Interacciones cinematográficas, Tilt 3D y cursor dinámico.
+### CURRENT STATUS: ACTIVE BETA
+The project is currently in a **Beta** stage. Core modules are operational, but the system undergoes continuous optimization. Features and security protocols are subject to real-time updates to ensure maximum stability.
 
-### 🛡️ Módulos Activos
-* **Security:** Filtrado inteligente de spam y sistema de sanciones persistente.
-* **Economy:** Motor de transacciones en tiempo real con ranking global de liquidez.
-* **Infrastructure:** Alojamiento 24/7 en la nube para eliminar la fricción de instalación.
+### TECHNICAL SPECIFICATIONS
+* **Core Engine:** Modular Python-based architecture optimized for high-concurrency environments.
+* **Interface:** Single Page Application (SPA) utilizing a Bento-Grid layout for data visualization.
+* **UX Design:** Advanced interaction layer featuring 3D tilt mechanics and cinematic transitions.
+* **Data Integrity:** Real-time persistence engine to ensure zero data loss during transactions.
+
+### OPERATIONAL MODULES
+* **Security Layer:** Proactive moderation including intelligent invite filtering and persistent infraction tracking.
+* **Economic Framework:** Scalable banking system with global liquidity rankings and social engagement tools.
+* **Deployment:** 24/7 cloud-hosted infrastructure, eliminating the need for local client installation.
 
 ---
 
 <div align="center">
-  <code>SYSTEM STATUS: OPERATIONAL</code>
+  <code>[ STATUS: OPERATIONAL / STAGE: BETA ]</code>
   <br />
-  <sub>CRAFTED BY <strong>SNOW099</strong></sub>
+  <sub>DEVELOPED BY <strong>SNOW-099</strong></sub>
 </div>
