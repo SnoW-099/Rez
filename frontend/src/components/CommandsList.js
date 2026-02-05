@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
+import { useToast } from '../context/ToastContext';
 
 const CommandsList = () => {
     const [commands, setCommands] = useState([]);
-    // Removed specific loading state UI for faster perceived load
-    // const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const { addToast } = useToast();
 
     useEffect(() => {
         const fetchCommands = async () => {
             try {
+                // Add a small delay for shimmer effect preview
+                await new Promise(resolve => setTimeout(resolve, 1500));
                 const data = await api.getCommands();
                 setCommands(data);
             } catch (error) {
                 console.error("Failed to fetch commands", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -54,10 +59,23 @@ const CommandsList = () => {
             </div>
 
             <div className="bento-grid">
-                {filteredCommands.map((cmd, index) => (
-                    <div key={index} className="glass-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                {loading ? (
+                    // Shimmer Skeletons
+                    [1, 2, 3, 4].map(i => (
+                        <div key={i} className="glass-card skeleton-card shimmer-sweep" />
+                    ))
+                ) : filteredCommands.map((cmd, index) => (
+                    <div
+                        key={index}
+                        className="glass-card"
+                        style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', cursor: 'none !important' }}
+                        onClick={() => {
+                            navigator.clipboard.writeText(cmd.name);
+                            addToast(`Copiado: ${cmd.name}`);
+                        }}
+                    >
                         <code style={{
-                            background: 'rgba(88, 101, 242, 0.2)', /* Blurple tint */
+                            background: 'rgba(88, 101, 242, 0.2)',
                             color: '#5865F2',
                             padding: '6px 12px',
                             borderRadius: '8px',

@@ -1,6 +1,7 @@
 # api_server.py - Servidor API para comunicación con el frontend
 
 from flask import Flask, jsonify
+from flask_cors import CORS
 from threading import Thread
 import json
 import os
@@ -13,6 +14,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from config_backend import config
 
 app = Flask(__name__)
+CORS(app) # Habilitar CORS para peticiones desde el frontend
 
 # Variable global para almacenar el estado del bot
 bot_status = {

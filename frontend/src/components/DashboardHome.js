@@ -1,16 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../api';
+import ProgressiveImage from './ProgressiveImage';
+import { useToast } from '../context/ToastContext';
 import updates from '../data/UpdatesData';
-import TiltCard from './TiltCard'; // New import
+import TiltCard from './TiltCard';
 
 const DashboardHome = () => {
     const [stats, setStats] = useState(null);
     const [status, setStatus] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const { addToast } = useToast();
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
+                // Add slight delay for premium feel / shimmer visibility
+                await new Promise(resolve => setTimeout(resolve, 800));
                 const [statsData, statusData] = await Promise.all([
                     api.getBotStats(),
                     api.getBotStatus()
@@ -19,68 +26,53 @@ const DashboardHome = () => {
                 setStatus(statusData);
             } catch (error) {
                 console.error("Failed to fetch dashboard data", error);
+                addToast('Failed to load dashboard data.', 'error');
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchData();
-    }, []);
+    }, [addToast]);
 
     return (
         <div className="animate-fade-in">
             {/* Header / Profile Section - Tilt Effect */}
-            <TiltCard
-                className="glass-card"
-                style={{
-                    marginBottom: '20px',
-                    background: '#000000',
-                    border: '1px solid var(--border-color)'
-                }}
-            >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-                    <div style={{
+            <div className={`glass-card ${loading ? 'shimmer-sweep' : ''}`} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '20px',
+                marginBottom: '16px',
+                position: 'relative',
+                overflow: 'hidden'
+            }}>
+                <ProgressiveImage
+                    src="/images/bot_icon.jpg"
+                    placeholder="rgba(255,255,255,0.05)"
+                    alt="Rez Bot avatar"
+                    style={{
                         width: '100px',
                         height: '100px',
-                        borderRadius: '50%',
-                        background: '#000',
-                        border: '4px solid #18181b',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flexShrink: 0
-                    }}>
-                        <img
-                            src="/images/bot_icon.jpg"
-                            alt="Rez Icon"
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover'
-                            }}
-                        />
-                    </div>
-                    <div>
-                        {/* Sand/Dissolve Text Animation */}
-                        <h1 className="sand-text" style={{ fontSize: '2rem', display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontWeight: '700' }}>
-                            Rez
-                            <span style={{
-                                background: 'var(--accent-color)',
-                                fontSize: '0.7rem',
-                                fontWeight: 'bold',
-                                padding: '2px 6px',
-                                borderRadius: '4px',
-                                verticalAlign: 'middle',
-                                textTransform: 'uppercase',
-                                marginTop: '2px',
-                                color: 'white',
-                                textShadow: 'none', /* Ensure shadow doesn't break dissolve */
-                                opacity: 1 /* Badge stays solid */
-                            }}>APP</span>
-                        </h1>
-                        <p style={{ color: 'var(--text-secondary)', margin: '4px 0 0 0', fontSize: '1rem', fontWeight: '500' }}>Rez#1996</p>
-                    </div>
+                        borderRadius: '20px',
+                        backgroundColor: '#18181b'
+                    }}
+                />
+                <div>
+                    <h1 className="sand-text" style={{ fontSize: '2rem', display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontWeight: '700' }}>
+                        Rez
+                        <span style={{
+                            background: 'var(--accent-color)',
+                            fontSize: '0.7rem',
+                            fontWeight: 'bold',
+                            padding: '2px 6px',
+                            borderRadius: '4px',
+                            color: 'white',
+                            textTransform: 'uppercase'
+                        }}>APP</span>
+                    </h1>
+                    <p style={{ color: 'var(--text-secondary)', margin: '4px 0 0 0', fontSize: '1rem', fontWeight: '500' }}>Rez#1996</p>
                 </div>
-            </TiltCard>
+            </div>
 
             {/* Actions */}
             <div style={{ marginBottom: '24px' }}>
@@ -96,7 +88,7 @@ const DashboardHome = () => {
                         <div>
                             <h3 style={{ marginBottom: '5px', fontSize: '0.9rem', color: 'var(--text-primary)' }}>Status</h3>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                                <div style={{
+                                <div className="status-dot-pulse" style={{
                                     width: '8px',
                                     height: '8px',
                                     borderRadius: '50%',
@@ -107,7 +99,9 @@ const DashboardHome = () => {
                         </div>
                         <div style={{ textAlign: 'right' }}>
                             <h3 style={{ marginBottom: '5px', fontSize: '0.9rem', color: 'var(--text-primary)' }}>Servers</h3>
-                            <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>{stats?.servers || 0}</div>
+                            <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
+                                {loading ? '...' : (stats?.servers || 0)}
+                            </div>
                         </div>
                     </div>
                 </TiltCard>

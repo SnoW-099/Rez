@@ -141,10 +141,3 @@ class CommandsCog(commands.Cog):
 # Función para añadir el cog al bot
 async def setup(bot):
     await bot.add_cog(CommandsCog(bot))
-
-# Funciones para el conteo de comandos (para compatibilidad con el sistema de API)
-def get_command_count():
-    return get_command_count()
-
-def increment_command_count():
-    increment_command_count()

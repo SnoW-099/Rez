@@ -32,13 +32,18 @@ export const getBotStats = async () => {
 
 // Obtener lista de comandos
 export const getCommands = async () => {
-  try {
-    const response = await api.get('/commands');
-    return response.data;
-  } catch (error) {
-    console.error('Error al obtener los comandos:', error);
-    throw error;
-  }
+  // Official command list from commands.py
+  return [
+    { name: "!profile", description: "Muestra tu perfil de usuario" },
+    { name: "!ranking", description: "Muestra el top 5 de usuarios más ricos" },
+    { name: "!work", description: "Trabaja para ganar dinero (cooldown: 3 minutos)" },
+    { name: "!balance", description: "Consulta tu saldo" },
+    { name: "!transfer", description: "Transfiere dinero a otro usuario (@usuario cantidad)" },
+    { name: "!rob", description: "Intenta robarle dinero a otro usuario (@usuario)" },
+    { name: "!ping", description: "Verifica la latencia del bot" },
+    { name: "!warn", description: "Advierte a un usuario (solo admins/mods)" },
+    { name: "!clear", description: "Elimina mensajes (solo admins/mods)" }
+  ];
 };
 
 const apiMethods = {

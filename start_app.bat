@@ -2,7 +2,7 @@
 echo Iniciando la aplicacion completa...
 
 REM Iniciar el backend en una ventana separada
-start "Backend Server" cmd /k "cd /d ..\backend && python main.py"
+start "Backend Server" cmd /k "cd /d backend && "C:\Users\angel\AppData\Local\Python\pythoncore-3.14-64\python.exe" main.py"
 
 REM Esperar un momento para que el backend inicie
 timeout /t 5 /nobreak >nul

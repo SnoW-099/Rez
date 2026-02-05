@@ -1,8 +1,39 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import './navbar.css';
 
 const Navbar = () => {
+  const location = useLocation();
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0, opacity: 0 });
+  const navLinksRef = useRef(null);
+
+  useEffect(() => {
+    const updateIndicator = () => {
+      if (navLinksRef.current) {
+        const activeLink = navLinksRef.current.querySelector('.nav-item.active');
+        if (activeLink) {
+          const { offsetLeft, offsetWidth } = activeLink;
+          setIndicatorStyle({
+            left: offsetLeft,
+            width: offsetWidth,
+            opacity: 1
+          });
+        } else {
+          setIndicatorStyle(prev => ({ ...prev, opacity: 0 }));
+        }
+      }
+    };
+
+    // Small timeout to ensure NavLink has updated its active class
+    const timer = setTimeout(updateIndicator, 50);
+    window.addEventListener('resize', updateIndicator);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', updateIndicator);
+    };
+  }, [location.pathname]);
+
   return (
     <nav className="glass-navbar">
       <div className="nav-container">
@@ -10,7 +41,17 @@ const Navbar = () => {
           Rez<span className="logo-dot">.</span>
         </NavLink>
 
-        <div className="nav-links">
+        <div className="nav-links" ref={navLinksRef}>
+          {/* The Sliding Indicator */}
+          <div
+            className="nav-sliding-indicator"
+            style={{
+              left: `${indicatorStyle.left}px`,
+              width: `${indicatorStyle.width}px`,
+              opacity: indicatorStyle.opacity
+            }}
+          />
+
           <NavLink to="/" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
             Start
           </NavLink>

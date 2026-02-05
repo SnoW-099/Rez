@@ -1,7 +1,16 @@
-/* App.css - Rez Dark Liquid Aesthetic */
 @import url('https://fonts.googleapis.com/css2?family=MSGothic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
+html {
+  scroll-behavior: smooth;
+}
+
 :root {
+  /* Scrollbar for Webkit */
+  --scrollbar-width: 6px;
+  --scrollbar-track: #000000;
+  --scrollbar-thumb: #27272a;
+  --scrollbar-thumb-hover: #3f3f46;
+
   /* Unified Dark Palette - Refined */
   --bg-color: #000000;
 
@@ -31,6 +40,30 @@
   box-sizing: border-box;
 }
 
+/* Custom Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
 /* Cursor Hide */
 body {
   cursor: none;
@@ -45,8 +78,11 @@ body {
 
 a,
 button,
+input,
+textarea,
+select,
 .pointer {
-  cursor: none;
+  cursor: none !important;
   /* Keep hidden even on interactables */
 }
 
@@ -54,7 +90,6 @@ button,
 .layout-container {
   padding-bottom: 50px;
   min-height: 100vh;
-  background: #000;
 }
 
 /* Navigation */
@@ -85,15 +120,18 @@ button,
 
 /* Global Card Style */
 .glass-card {
-  background: var(--card-bg);
+  background: rgba(9, 9, 11, 0.8);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
   border: 1px solid var(--border-color);
   border-radius: var(--card-radius);
   padding: 24px;
-  transition: border-color 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .glass-card:hover {
   border-color: #3f3f46;
+  background: rgba(15, 15, 18, 0.9);
 }
 
 /* Typography Defaults */
@@ -183,6 +221,71 @@ h3 {
   }
 }
 
+/* System Heartbeat (Pulsing Status) */
+.status-dot-pulse {
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(35, 165, 89, 0.4);
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(35, 165, 89, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(35, 165, 89, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(35, 165, 89, 0);
+  }
+}
+
+/* Shimmer Loading Effect */
+@keyframes shimmer {
+  0% {
+    left: -150%;
+  }
+
+  50% {
+    left: 150%;
+  }
+
+  100% {
+    left: 150%;
+  }
+}
+
+.shimmer-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent);
+  animation: shimmer 2.5s infinite;
+}
+
+.skeleton-card {
+  height: 120px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--border-color);
+}
+
 /* Loading */
 .loading-container {
   display: flex;
@@ -190,4 +293,47 @@ h3 {
   align-items: center;
   height: 300px;
   color: var(--text-secondary);
+}
+
+/* Custom Toast Style - Liquid Black */
+.toast-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.liquid-toast {
+  background: rgba(9, 9, 11, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  pointer-events: auto;
+}
+
+.liquid-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast-icon {
+  color: #5865F2;
+  /* Blurple */
 }

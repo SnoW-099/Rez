@@ -23,6 +23,7 @@ intents.members = True
 
 # Inicializar el bot
 bot = commands.Bot(command_prefix=config.PREFIX, intents=intents)
+bot.remove_command('help') # Eliminar el comando help por defecto para usar el personalizado
 
 @bot.event
 async def on_ready():
