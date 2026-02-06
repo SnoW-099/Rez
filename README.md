@@ -1,29 +1,34 @@
-Aquí tienes una versión directa, visual y al grano, perfecta para la estética minimalista de tu proyecto:
+<div align="center">
 
-🌌 Rez | Web Interface
-Official Liquid Black dashboard for the Rez ecosystem. High-performance, minimalist, and real-time.
+# 🌌 REZ | FRONTEND
+**Liquid Black Interface**
 
-🌐 Live: [https://rez-bot.netlify.app/] | 📡 Status: OPERATIONAL
+[![Status](https://img.shields.io/badge/SYSTEM-OPERATIONAL-34c759?style=flat-square&logo=statuspage&logoColor=white)](#)
+[![Hosting](https://img.shields.io/badge/DEPLOYED-NETLIFY-00AD9F?style=flat-square&logo=netlify&logoColor=white)](#)
 
-✨ Web Highlights
-Liquid Design: Fondo #000000 con bordes finos y animaciones fluidas.
+[Explore Dashboard](https://your-link.netlify.app) • [Report Bug](https://github.com/SnoW-099/Rez/issues)
 
-Bento Grid: Interfaz modular para estadísticas y control.
+---
 
-Micro-Anims: Sonar de carga, efectos de pulso y entrada en cascada.
+### 🖥️ THE INTERFACE
+*Minimalist bento-style dashboard built for performance.*
 
-Responsive: Optimizado para escritorio y móvil.
+</div>
 
-🛠️ Tech Stack
-Frontend: HTML5, CSS3 (Vanilla), JavaScript.
+| Feature | Description |
+| :--- | :--- |
+| **Liquid Design** | Pure `#000000` aesthetic with 1px borders. |
+| **Bento Grid** | Modular data architecture for stats and status. |
+| **Micro-Anims** | Sonar boot sequence and staggered entry. |
+| **Reactive UI** | Dynamic scale and glow effects on interaction. |
 
-Bridge: Flask API (Data fetching).
+<br />
 
-Hosting: Netlify.
+### 🛠️ TECH STACK
+`HTML5` • `CSS3 (Vanilla)` • `JavaScript` • `Flask API`
 
-📁 Structure
-index.html: Estructura del dashboard.
+---
 
-style.css: Estética Liquid Black y animaciones.
-
-script.js: Lógica de API e interacciones.
+<div align="center">
+Developed with 🖤 by <b>Snow099</b>
+</div>
