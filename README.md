@@ -1,34 +1,37 @@
-<div align="center">
+# ⚙️ Rez | Backend Engine
+**The core infrastructure powering the Rez ecosystem.**
 
-# REZ
-`L I Q U I D · B L A C K · S Y S T E M`
-
----
-
-[**DASHBOARD**](https://rez-bot.netlify.app/) &nbsp; • &nbsp; [**PORTFOLIO**](https://portfolio-snow.netlify.app/)
+This repository contains the logic, database management, and API bridge that sustain the security and economy modules of Rez.
 
 ---
 
-</div>
+## 🏗️ System Architecture
+The backend is divided into two main components:
+1. **The Bot (Discord Core):** Handles events, commands, and real-time interaction using `discord.py` / `disnake`.
+2. **The API Bridge (Flask):** A lightweight REST API that serves data to the Frontend dashboard.
 
-### SYSTEM OVERVIEW
-Rez is a high-performance infrastructure for Discord, engineered with a focus on absolute minimalism and technical efficiency. The system operates on a **Liquid Black** architecture, prioritizing low-latency response times and a seamless user experience.
 
-### TECHNICAL SPECIFICATIONS
-* **Core Engine:** Modular Python-based architecture optimized for high-concurrency environments.
-* **Interface:** Single Page Application (SPA) utilizing a Bento-Grid layout for data visualization.
-* **UX Design:** Advanced interaction layer featuring 3D tilt mechanics and cinematic transitions.
-* **Data Integrity:** Real-time persistence engine to ensure zero data loss during transactions.
 
-### OPERATIONAL MODULES
-* **Security Layer:** Proactive moderation including intelligent invite filtering and persistent infraction tracking.
-* **Economic Framework:** Scalable banking system with global liquidity rankings and social engagement tools.
-* **Deployment:** 24/7 cloud-hosted infrastructure, eliminating the need for local client installation.
+## 🛠️ Technical Stack
+* **Language:** Python 3.10+
+* **Framework:** Flask (API)
+* **Library:** Discord.py / Disnake (Bot)
+* **Database:** Supabase / MongoDB (Persistence)
+* **Process Manager:** PM2 / Docker
 
----
+## 📡 API Endpoints (Flask)
+| Endpoint | Method | Description |
+| :--- | :--- | :--- |
+| `/api/v1/status` | `GET` | Returns system health and latency. |
+| `/api/v1/stats` | `GET` | Fetches global server and user counts. |
+| `/api/v1/user/<id>`| `GET` | Returns specific economy and security data for a user. |
 
-<div align="center">
+## 🛡️ Security & Performance
+* **Asynchronous Execution:** Built with `asyncio` to handle multiple requests without blocking.
+* **CORS Enabled:** Configured for secure communication with the Netlify frontend.
+* **Environment Variables:** Critical tokens and DB strings are managed via `.env` files.
 
-DEVELOPED BY **SNOW-099**
-
-</div>
+## 🚀 Installation & Setup
+1. **Clone the backend:**
+   ```bash
+   git clone [https://github.com/SnoW-099/Rez-Backend](https://github.com/SnoW-099/Rez-Backend)
