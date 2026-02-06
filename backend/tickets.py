@@ -8,8 +8,6 @@ import asyncio
 logger = logging.getLogger(__name__)
 
 class TicketsCog(commands.Cog):
-    """Support ticket system"""
-    
     def __init__(self, bot):
         self.bot = bot
         self.ticket_counter = 0
@@ -17,7 +15,6 @@ class TicketsCog(commands.Cog):
 
     @commands.command(name='ticket', aliases=['support'])
     async def create_ticket(self, ctx, *, reason: str = "No reason specified"):
-        """Create a support ticket"""
         increment_command_count()
         
         for ticket_id, ticket in self.active_tickets.items():
@@ -84,7 +81,6 @@ class TicketsCog(commands.Cog):
 
     @commands.command(name='close', aliases=['closeticket'])
     async def close_ticket(self, ctx):
-        """Close the current ticket"""
         increment_command_count()
         
         ticket_id = None
@@ -126,7 +122,6 @@ class TicketsCog(commands.Cog):
     @commands.command(name='adduser', aliases=['ticketadd'])
     @commands.has_permissions(manage_messages=True)
     async def add_user_to_ticket(self, ctx, member: discord.Member):
-        """Add a user to the ticket"""
         increment_command_count()
         
         is_ticket = any(t['channel_id'] == ctx.channel.id for t in self.active_tickets.values())
@@ -146,7 +141,6 @@ class TicketsCog(commands.Cog):
     @commands.command(name='removeuser', aliases=['ticketremove'])
     @commands.has_permissions(manage_messages=True)
     async def remove_user_from_ticket(self, ctx, member: discord.Member):
-        """Remove a user from the ticket"""
         increment_command_count()
         
         is_ticket = any(t['channel_id'] == ctx.channel.id for t in self.active_tickets.values())

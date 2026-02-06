@@ -9,8 +9,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 class GiveawayCog(commands.Cog):
-    """Giveaway system"""
-    
     def __init__(self, bot):
         self.bot = bot
         self.active_giveaways = {}
@@ -18,7 +16,6 @@ class GiveawayCog(commands.Cog):
     @commands.command(name='giveaway', aliases=['gstart'])
     @commands.has_permissions(manage_guild=True)
     async def giveaway(self, ctx, duration: str, *, prize: str):
-        """Create a giveaway. Usage: !giveaway 1h Special Prize"""
         increment_command_count()
         
         time_units = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400}
@@ -65,7 +62,6 @@ class GiveawayCog(commands.Cog):
         await self.end_giveaway(msg.id)
 
     async def end_giveaway(self, message_id):
-        """End a giveaway and pick winner"""
         if message_id not in self.active_giveaways:
             return
         
@@ -109,7 +105,6 @@ class GiveawayCog(commands.Cog):
     @commands.command(name='gend', aliases=['endgiveaway'])
     @commands.has_permissions(manage_guild=True)
     async def giveaway_end(self, ctx, message_id: int = None):
-        """End a giveaway manually"""
         increment_command_count()
         
         if message_id is None:
@@ -128,7 +123,6 @@ class GiveawayCog(commands.Cog):
     @commands.command(name='greroll', aliases=['reroll'])
     @commands.has_permissions(manage_guild=True)
     async def giveaway_reroll(self, ctx, message_id: int):
-        """Reroll a giveaway winner"""
         increment_command_count()
         
         try:

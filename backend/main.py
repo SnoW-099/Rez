@@ -1,5 +1,3 @@
-# main.py - Discord Bot main entry point
-
 import asyncio
 import threading
 import discord
@@ -9,7 +7,6 @@ import os
 import logging
 from datetime import datetime
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s | %(levelname)-8s | %(name)s: %(message)s',
@@ -17,7 +14,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger('RezBot')
 
-# Add backend directory to path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from config_backend import config
@@ -25,13 +21,11 @@ from api_server import update_bot_status, run_api_server
 from commands_manager import get_command_count
 from database import database
 
-# Configure intents
 intents = discord.Intents.default()
 intents.message_content = True
 intents.guilds = True
 intents.members = True
 
-# Initialize bot
 bot = commands.Bot(command_prefix=config.PREFIX, intents=intents)
 bot.remove_command('help')
 
@@ -41,14 +35,12 @@ async def on_ready():
     logger.info(f'Connected to {len(bot.guilds)} servers')
     logger.info(f'Serving {len(bot.users)} users')
     
-    # Verify MongoDB connection
     try:
         database.connect()
         logger.info("MongoDB connection verified")
     except Exception as e:
         logger.error(f"Error connecting to MongoDB: {e}")
     
-    # Set bot presence
     await bot.change_presence(
         activity=discord.Activity(
             type=discord.ActivityType.watching,
@@ -56,14 +48,10 @@ async def on_ready():
         )
     )
 
-    # Update bot status in API
     update_bot_status('online', len(bot.guilds), len(bot.users), 0)
-
-    # Update status periodically
     bot.loop.create_task(update_status_periodically())
 
 async def update_status_periodically():
-    """Update bot status periodically"""
     while True:
         await asyncio.sleep(30)
         update_bot_status('online', len(bot.guilds), len(bot.users), get_command_count())
@@ -77,7 +65,6 @@ async def update_status_periodically():
 
 @bot.event
 async def on_command_error(ctx, error):
-    """Global command error handler"""
     if isinstance(error, commands.CommandNotFound):
         return
     elif isinstance(error, commands.CommandOnCooldown):
@@ -93,17 +80,14 @@ async def on_command_error(ctx, error):
 
 @bot.event
 async def on_guild_join(guild):
-    """When bot joins a server"""
     logger.info(f"New server: {guild.name} ({guild.member_count} members)")
     update_bot_status('online', len(bot.guilds), len(bot.users), get_command_count())
 
 @bot.event
 async def on_guild_remove(guild):
-    """When bot leaves a server"""
     logger.info(f"Left server: {guild.name}")
     update_bot_status('online', len(bot.guilds), len(bot.users), get_command_count())
 
-# Load extensions
 async def load_extensions():
     extensions = ['commands', 'moderation', 'music', 'levels', 'games', 'giveaways', 'tickets', 'owner']
     for ext in extensions:
@@ -119,12 +103,10 @@ async def setup_hook():
 async def main():
     bot.setup_hook = setup_hook
     
-    # Start API server in separate thread
     api_thread = threading.Thread(target=run_api_server, daemon=True)
     api_thread.start()
     logger.info("API server started on port 3001")
     
-    # Start bot
     logger.info("=" * 50)
     logger.info("Starting Rez Bot v2.0 - Liquid Black Edition")
     logger.info("=" * 50)

@@ -5,15 +5,12 @@ from bank_system import BankSystem
 from commands_manager import increment_command_count
 
 class LevelsCog(commands.Cog):
-    """Levels and XP system"""
-    
     def __init__(self, bot):
         self.bot = bot
         self.bank = BankSystem()
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        """Give XP for each message"""
         if message.author.bot:
             return
         if not message.guild:
@@ -41,7 +38,6 @@ class LevelsCog(commands.Cog):
 
     @commands.command(name='level', aliases=['lvl', 'xp'])
     async def level(self, ctx, member: discord.Member = None):
-        """View your level and XP"""
         increment_command_count()
         
         if member is None:
@@ -74,7 +70,6 @@ class LevelsCog(commands.Cog):
 
     @commands.command(name='leaderboard', aliases=['lb', 'top'])
     async def leaderboard(self, ctx):
-        """Top 10 XP leaderboard"""
         increment_command_count()
         
         users = list(self.bank.db.users.find().sort('xp', -1).limit(10))
@@ -83,10 +78,7 @@ class LevelsCog(commands.Cog):
             await ctx.send("No users in the database yet!")
             return
         
-        embed = discord.Embed(
-            title="🏆 XP Leaderboard",
-            color=0x8b5cf6
-        )
+        embed = discord.Embed(title="🏆 XP Leaderboard", color=0x8b5cf6)
         
         medals = ['🥇', '🥈', '🥉']
         description = ""

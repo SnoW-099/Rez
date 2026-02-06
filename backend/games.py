@@ -6,8 +6,6 @@ from commands_manager import increment_command_count
 import asyncio
 
 class GamesCog(commands.Cog):
-    """Casino mini-games"""
-    
     def __init__(self, bot):
         self.bot = bot
         self.bank = BankSystem()
@@ -15,7 +13,6 @@ class GamesCog(commands.Cog):
 
     @commands.command(name='coinflip', aliases=['cf', 'flip'])
     async def coinflip(self, ctx, amount: int, choice: str = None):
-        """Bet on heads or tails. Usage: !coinflip 100 heads"""
         increment_command_count()
         
         if amount < 10:
@@ -60,7 +57,6 @@ class GamesCog(commands.Cog):
 
     @commands.command(name='slots', aliases=['slot'])
     async def slots(self, ctx, amount: int):
-        """Play the slot machine"""
         increment_command_count()
         
         if amount < 10:
@@ -109,7 +105,6 @@ class GamesCog(commands.Cog):
 
     @commands.command(name='blackjack', aliases=['bj', '21'])
     async def blackjack(self, ctx, amount: int):
-        """Play Blackjack (21)"""
         increment_command_count()
         
         if amount < 10:
@@ -154,7 +149,6 @@ class GamesCog(commands.Cog):
 
     @commands.command(name='hit')
     async def hit(self, ctx):
-        """Draw a card in Blackjack"""
         if ctx.author.id not in self.blackjack_games:
             await ctx.send("❌ No active game. Use `!blackjack [amount]`")
             return
@@ -177,7 +171,6 @@ class GamesCog(commands.Cog):
 
     @commands.command(name='stand')
     async def stand(self, ctx):
-        """Stand in Blackjack"""
         if ctx.author.id not in self.blackjack_games:
             await ctx.send("❌ No active game.")
             return
@@ -185,7 +178,6 @@ class GamesCog(commands.Cog):
         await self.end_blackjack(ctx, ctx.author.id, "stand")
 
     async def end_blackjack(self, ctx, user_id, reason):
-        """End a Blackjack game"""
         game = self.blackjack_games.pop(user_id)
         player_value = self.calculate_hand(game['player'])
         
@@ -227,7 +219,6 @@ class GamesCog(commands.Cog):
         await ctx.send(embed=embed)
 
     def calculate_hand(self, hand):
-        """Calculate Blackjack hand value"""
         value = 0
         aces = 0
         
@@ -248,7 +239,6 @@ class GamesCog(commands.Cog):
 
     @commands.command(name='roulette', aliases=['roul'])
     async def roulette(self, ctx, amount: int, bet: str):
-        """Roulette. Bet: red/black/green or a number (0-36)"""
         increment_command_count()
         
         if amount < 10:

@@ -6,18 +6,14 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Bot owner ID
-OWNER_ID = 972405071902023711  # .snow_xd
+OWNER_ID = 972405071902023711
 
 def is_owner():
-    """Check if user is the bot owner"""
     async def predicate(ctx):
         return ctx.author.id == OWNER_ID
     return commands.check(predicate)
 
 class OwnerCog(commands.Cog):
-    """Owner-only commands"""
-    
     def __init__(self, bot):
         self.bot = bot
         self.bank = BankSystem()
@@ -25,7 +21,6 @@ class OwnerCog(commands.Cog):
     @commands.command(name='addmoney', aliases=['addbal', 'givemoney'])
     @is_owner()
     async def add_money(self, ctx, member: discord.Member, amount: int):
-        """[OWNER] Add money to a user"""
         increment_command_count()
         
         if amount <= 0:
@@ -34,10 +29,7 @@ class OwnerCog(commands.Cog):
         
         self.bank.add_money(member.id, amount)
         
-        embed = discord.Embed(
-            title="💰 Money Added",
-            color=0x10b981
-        )
+        embed = discord.Embed(title="💰 Money Added", color=0x10b981)
         embed.add_field(name="User", value=member.mention, inline=True)
         embed.add_field(name="Amount", value=f"+${amount:,}", inline=True)
         embed.add_field(name="By", value=ctx.author.mention, inline=True)
@@ -48,7 +40,6 @@ class OwnerCog(commands.Cog):
     @commands.command(name='removemoney', aliases=['removebal', 'takemoney'])
     @is_owner()
     async def remove_money(self, ctx, member: discord.Member, amount: int):
-        """[OWNER] Remove money from a user"""
         increment_command_count()
         
         if amount <= 0:
@@ -57,10 +48,7 @@ class OwnerCog(commands.Cog):
         
         actual_removed = self.bank.remove_money(member.id, amount)
         
-        embed = discord.Embed(
-            title="💸 Money Removed",
-            color=0xef4444
-        )
+        embed = discord.Embed(title="💸 Money Removed", color=0xef4444)
         embed.add_field(name="User", value=member.mention, inline=True)
         embed.add_field(name="Amount", value=f"-${actual_removed:,}", inline=True)
         embed.add_field(name="By", value=ctx.author.mention, inline=True)
@@ -71,7 +59,6 @@ class OwnerCog(commands.Cog):
     @commands.command(name='setlevel')
     @is_owner()
     async def set_level(self, ctx, member: discord.Member, level: int):
-        """[OWNER] Set a user's level"""
         increment_command_count()
         
         if level < 0:
@@ -85,10 +72,7 @@ class OwnerCog(commands.Cog):
             {'$set': {'level': level, 'xp': xp_needed}}
         )
         
-        embed = discord.Embed(
-            title="⭐ Level Set",
-            color=0x8b5cf6
-        )
+        embed = discord.Embed(title="⭐ Level Set", color=0x8b5cf6)
         embed.add_field(name="User", value=member.mention, inline=True)
         embed.add_field(name="New Level", value=str(level), inline=True)
         embed.add_field(name="XP", value=f"{xp_needed:,}", inline=True)
@@ -99,7 +83,6 @@ class OwnerCog(commands.Cog):
     @commands.command(name='resetuser')
     @is_owner()
     async def reset_user(self, ctx, member: discord.Member):
-        """[OWNER] Reset all user data"""
         increment_command_count()
         
         self.bank.db.users.delete_one({'user_id': str(member.id)})
@@ -116,7 +99,6 @@ class OwnerCog(commands.Cog):
     @commands.command(name='setbalance', aliases=['setbal'])
     @is_owner()
     async def set_balance(self, ctx, member: discord.Member, amount: int):
-        """[OWNER] Set a user's exact balance"""
         increment_command_count()
         
         self.bank.db.users.update_one(
@@ -125,10 +107,7 @@ class OwnerCog(commands.Cog):
             upsert=True
         )
         
-        embed = discord.Embed(
-            title="💵 Balance Set",
-            color=0x10b981
-        )
+        embed = discord.Embed(title="💵 Balance Set", color=0x10b981)
         embed.add_field(name="User", value=member.mention, inline=True)
         embed.add_field(name="New Balance", value=f"${amount:,}", inline=True)
         
@@ -138,13 +117,9 @@ class OwnerCog(commands.Cog):
     @commands.command(name='botstat')
     @is_owner()
     async def botstats(self, ctx):
-        """[OWNER] Show detailed bot statistics"""
         increment_command_count()
         
-        embed = discord.Embed(
-            title="📊 Bot Statistics",
-            color=0x5865F2
-        )
+        embed = discord.Embed(title="📊 Bot Statistics", color=0x5865F2)
         embed.add_field(name="Servers", value=len(self.bot.guilds), inline=True)
         embed.add_field(name="Users", value=len(self.bot.users), inline=True)
         embed.add_field(name="Latency", value=f"{round(self.bot.latency * 1000)}ms", inline=True)

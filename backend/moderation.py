@@ -8,18 +8,13 @@ import logging
 logger = logging.getLogger(__name__)
 
 class ModerationCog(commands.Cog):
-    """Moderation commands"""
-    
     def __init__(self, bot):
         self.bot = bot
         self.bank = BankSystem()
 
-    # ============== WARN ==============
-
     @commands.command(name='warn')
     @commands.has_permissions(manage_messages=True)
     async def warn(self, ctx, member: discord.Member, *, reason: str = "No reason specified"):
-        """Warn a user"""
         increment_command_count()
         
         if member.top_role >= ctx.author.top_role:
@@ -28,10 +23,7 @@ class ModerationCog(commands.Cog):
         
         warnings = self.bank.add_warning(member.id)
         
-        embed = discord.Embed(
-            title="⚠️ User Warned",
-            color=0xffa500
-        )
+        embed = discord.Embed(title="⚠️ User Warned", color=0xffa500)
         embed.add_field(name="User", value=member.mention, inline=True)
         embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
         embed.add_field(name="Warnings", value=f"{warnings}/3", inline=True)
@@ -52,12 +44,9 @@ class ModerationCog(commands.Cog):
         if isinstance(error, commands.MissingPermissions):
             await ctx.send("❌ You need manage messages permission.")
 
-    # ============== MUTE (Timeout) ==============
-
     @commands.command(name='mute', aliases=['timeout'])
     @commands.has_permissions(moderate_members=True)
     async def mute(self, ctx, member: discord.Member, duration: str = "10m", *, reason: str = "No reason"):
-        """Mute a user temporarily (e.g., !mute @user 10m)"""
         increment_command_count()
         
         if member.top_role >= ctx.author.top_role:
@@ -78,17 +67,14 @@ class ModerationCog(commands.Cog):
             return
         
         seconds = amount * time_units[unit]
-        if seconds > 2419200:  # 28 days max
+        if seconds > 2419200:
             await ctx.send("❌ Maximum is 28 days.")
             return
         
         try:
             await member.timeout(timedelta(seconds=seconds), reason=reason)
             
-            embed = discord.Embed(
-                title="🔇 User Muted",
-                color=0xff6b6b
-            )
+            embed = discord.Embed(title="🔇 User Muted", color=0xff6b6b)
             embed.add_field(name="User", value=member.mention, inline=True)
             embed.add_field(name="Duration", value=duration, inline=True)
             embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
@@ -105,12 +91,9 @@ class ModerationCog(commands.Cog):
         if isinstance(error, commands.MissingPermissions):
             await ctx.send("❌ You need moderate members permission.")
 
-    # ============== UNMUTE ==============
-
     @commands.command(name='unmute', aliases=['untimeout'])
     @commands.has_permissions(moderate_members=True)
     async def unmute(self, ctx, member: discord.Member):
-        """Remove mute from a user"""
         increment_command_count()
         
         try:
@@ -119,12 +102,9 @@ class ModerationCog(commands.Cog):
         except discord.Forbidden:
             await ctx.send("❌ I don't have permission to unmute.")
 
-    # ============== BAN ==============
-
     @commands.command(name='ban')
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason: str = "No reason"):
-        """Ban a user from the server"""
         increment_command_count()
         
         if member.top_role >= ctx.author.top_role:
@@ -139,10 +119,7 @@ class ModerationCog(commands.Cog):
             
             await member.ban(reason=reason, delete_message_days=1)
             
-            embed = discord.Embed(
-                title="🔨 User Banned",
-                color=0xff0000
-            )
+            embed = discord.Embed(title="🔨 User Banned", color=0xff0000)
             embed.add_field(name="User", value=f"{member} ({member.id})", inline=False)
             embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
             embed.add_field(name="Reason", value=reason, inline=False)
@@ -158,12 +135,9 @@ class ModerationCog(commands.Cog):
         if isinstance(error, commands.MissingPermissions):
             await ctx.send("❌ You need ban members permission.")
 
-    # ============== UNBAN ==============
-
     @commands.command(name='unban')
     @commands.has_permissions(ban_members=True)
     async def unban(self, ctx, user_id: int):
-        """Unban a user by ID"""
         increment_command_count()
         
         try:
@@ -175,12 +149,9 @@ class ModerationCog(commands.Cog):
         except discord.Forbidden:
             await ctx.send("❌ I don't have permission to unban.")
 
-    # ============== KICK ==============
-
     @commands.command(name='kick')
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member: discord.Member, *, reason: str = "No reason"):
-        """Kick a user from the server"""
         increment_command_count()
         
         if member.top_role >= ctx.author.top_role:
@@ -195,10 +166,7 @@ class ModerationCog(commands.Cog):
             
             await member.kick(reason=reason)
             
-            embed = discord.Embed(
-                title="👢 User Kicked",
-                color=0xffa500
-            )
+            embed = discord.Embed(title="👢 User Kicked", color=0xffa500)
             embed.add_field(name="User", value=f"{member} ({member.id})", inline=False)
             embed.add_field(name="Moderator", value=ctx.author.mention, inline=True)
             embed.add_field(name="Reason", value=reason, inline=False)
@@ -214,12 +182,9 @@ class ModerationCog(commands.Cog):
         if isinstance(error, commands.MissingPermissions):
             await ctx.send("❌ You need kick members permission.")
 
-    # ============== CLEAR ==============
-
     @commands.command(name='clear', aliases=['purge', 'clean'])
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int = 10):
-        """Delete messages from a channel"""
         increment_command_count()
         
         if amount < 1 or amount > 100:
@@ -237,12 +202,9 @@ class ModerationCog(commands.Cog):
         if isinstance(error, commands.MissingPermissions):
             await ctx.send("❌ You need manage messages permission.")
 
-    # ============== SLOWMODE ==============
-
     @commands.command(name='slowmode', aliases=['slow'])
     @commands.has_permissions(manage_channels=True)
     async def slowmode(self, ctx, seconds: int = 0):
-        """Set channel slowmode (0 = off)"""
         increment_command_count()
         
         if seconds < 0 or seconds > 21600:
@@ -258,12 +220,9 @@ class ModerationCog(commands.Cog):
         except discord.Forbidden:
             await ctx.send("❌ I don't have permission to change slowmode.")
 
-    # ============== RESET WARNINGS ==============
-
     @commands.command(name='reset_warnings', aliases=['clearwarns'])
     @commands.has_permissions(manage_messages=True)
     async def reset_warnings(self, ctx, member: discord.Member):
-        """Reset a user's warnings"""
         increment_command_count()
         
         self.bank.reset_warnings(member.id)

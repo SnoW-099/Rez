@@ -12,7 +12,6 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='profile')
     async def profile(self, ctx, member: discord.Member = None):
-        """Shows a user's profile"""
         increment_command_count()
         if member is None:
             member = ctx.author
@@ -25,12 +24,10 @@ class CommandsCog(commands.Cog):
         )
         embed.set_thumbnail(url=member.avatar.url if member.avatar else member.default_avatar.url)
         
-        # Economy
         embed.add_field(name="💰 Balance", value=f"${user_data['balance']:,}", inline=True)
         embed.add_field(name="📊 Total Earned", value=f"${user_data.get('total_earned', 0):,}", inline=True)
         embed.add_field(name="💸 Total Spent", value=f"${user_data.get('total_spent', 0):,}", inline=True)
         
-        # XP and Level
         level = user_data.get('level', 0)
         xp = user_data.get('xp', 0)
         next_level_xp = self.bank.xp_for_level(level + 1)
@@ -38,8 +35,6 @@ class CommandsCog(commands.Cog):
         embed.add_field(name="⭐ Level", value=str(level), inline=True)
         embed.add_field(name="✨ XP", value=f"{xp:,} / {next_level_xp:,}", inline=True)
         embed.add_field(name="💬 Messages", value=f"{user_data.get('messages', 0):,}", inline=True)
-        
-        # Moderation
         embed.add_field(name="⚠️ Warnings", value=str(user_data['warnings']), inline=True)
         
         embed.set_footer(text=f"ID: {member.id}")
@@ -47,7 +42,6 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='ranking')
     async def ranking(self, ctx):
-        """Shows top 5 richest users"""
         increment_command_count()
         top_users = self.bank.get_top_users(5)
         
@@ -72,7 +66,6 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='work')
     async def work(self, ctx):
-        """Work to earn money (cooldown: 3 minutes)"""
         increment_command_count()
         user_id = ctx.author.id
         
@@ -99,7 +92,6 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='daily')
     async def daily(self, ctx):
-        """Collect your daily reward"""
         increment_command_count()
         user_id = ctx.author.id
         
@@ -118,7 +110,6 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='balance', aliases=['bal'])
     async def balance(self, ctx, member: discord.Member = None):
-        """Check your balance or another user's"""
         increment_command_count()
         if member is None:
             member = ctx.author
@@ -128,7 +119,6 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='transfer', aliases=['pay', 'give'])
     async def transfer(self, ctx, member: discord.Member, amount: int):
-        """Transfer money to another user"""
         increment_command_count()
         
         if member.id == ctx.author.id:
@@ -147,10 +137,7 @@ class CommandsCog(commands.Cog):
         self.bank.remove_money(ctx.author.id, amount)
         self.bank.add_money(member.id, amount)
         
-        embed = discord.Embed(
-            title="💸 Transfer Complete",
-            color=0x10b981
-        )
+        embed = discord.Embed(title="💸 Transfer Complete", color=0x10b981)
         embed.add_field(name="From", value=ctx.author.mention, inline=True)
         embed.add_field(name="To", value=member.mention, inline=True)
         embed.add_field(name="Amount", value=f"${amount:,}", inline=True)
@@ -159,7 +146,6 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='rob', aliases=['steal'])
     async def rob(self, ctx, member: discord.Member):
-        """Try to rob another user (50% success)"""
         increment_command_count()
         
         if member.id == ctx.author.id:
@@ -195,7 +181,6 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='shop', aliases=['store', 'tienda'])
     async def shop(self, ctx):
-        """View the item shop"""
         increment_command_count()
         
         embed = discord.Embed(
@@ -223,7 +208,6 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='buy', aliases=['purchase'])
     async def buy(self, ctx, item: str = None):
-        """Buy an item from the shop"""
         increment_command_count()
         
         if item is None:
@@ -261,14 +245,12 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='ping')
     async def ping(self, ctx):
-        """Check bot latency"""
         increment_command_count()
         latency = round(self.bot.latency * 1000)
         await ctx.send(f"🏓 Pong! Latency: **{latency}ms**")
 
     @commands.command(name='help', aliases=['commands', 'h'])
     async def help_command(self, ctx):
-        """Show all available commands"""
         increment_command_count()
         
         embed = discord.Embed(
@@ -283,41 +265,12 @@ class CommandsCog(commands.Cog):
             inline=False
         )
         
-        embed.add_field(
-            name="⭐ Levels",
-            value="`level` `leaderboard`",
-            inline=False
-        )
-        
-        embed.add_field(
-            name="🎰 Casino",
-            value="`coinflip` `slots` `blackjack` `roulette`",
-            inline=False
-        )
-        
-        embed.add_field(
-            name="🎁 Giveaways",
-            value="`giveaway` `gend` `greroll`",
-            inline=False
-        )
-        
-        embed.add_field(
-            name="🎫 Tickets",
-            value="`ticket` `close`",
-            inline=False
-        )
-        
-        embed.add_field(
-            name="🛡️ Moderation",
-            value="`warn` `mute` `unmute` `kick` `ban` `unban` `clear` `slowmode`",
-            inline=False
-        )
-        
-        embed.add_field(
-            name="⚙️ Utility",
-            value="`ping` `help`",
-            inline=False
-        )
+        embed.add_field(name="⭐ Levels", value="`level` `leaderboard`", inline=False)
+        embed.add_field(name="🎰 Casino", value="`coinflip` `slots` `blackjack` `roulette`", inline=False)
+        embed.add_field(name="🎁 Giveaways", value="`giveaway` `gend` `greroll`", inline=False)
+        embed.add_field(name="🎫 Tickets", value="`ticket` `close`", inline=False)
+        embed.add_field(name="🛡️ Moderation", value="`warn` `mute` `unmute` `kick` `ban` `unban` `clear` `slowmode`", inline=False)
+        embed.add_field(name="⚙️ Utility", value="`ping` `help`", inline=False)
         
         embed.set_footer(text="Rez Bot v2.0 - Liquid Black Edition")
         await ctx.send(embed=embed)
