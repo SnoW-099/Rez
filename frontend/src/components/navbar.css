@@ -1,0 +1,146 @@
+/* Dark Navbar Styles - Pill Shape */
+.glass-navbar {
+  background: #09090b;
+  border: 1px solid var(--border-color);
+  border-radius: 100px;
+  padding: 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-logo {
+  text-decoration: none;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  padding: 0 16px;
+  letter-spacing: -0.5px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 6px;
+  background: #18181b;
+  padding: 6px;
+  border-radius: 100px;
+  position: relative;
+  /* Base for sliding indicator */
+}
+
+.nav-item {
+  padding: 10px 20px;
+  border-radius: 30px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  text-decoration: none;
+  z-index: 1;
+  /* Stay above indicator */
+  position: relative;
+}
+
+.nav-item:hover {
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* THE SLIDING LIQUID INDICATOR */
+.nav-sliding-indicator {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  background: #27272a;
+  border-radius: 30px;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 0;
+  pointer-events: none;
+  /* Liquid Morphing Animation during transition */
+  animation: liquidMorph 1s infinite alternate;
+}
+
+@keyframes liquidMorph {
+  0% {
+    border-radius: 30px;
+  }
+
+  50% {
+    border-radius: 40% 60% 40% 60% / 60% 40% 60% 40%;
+  }
+
+  100% {
+    border-radius: 60% 40% 60% 40% / 40% 60% 40% 60%;
+  }
+}
+
+.nav-icon-link {
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.nav-icon-link:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-icon-link svg {
+  width: 28px;
+  height: 28px;
+}
+
+/* Secondary Action Button in Navbar */
+.invite-btn {
+  background: var(--text-primary);
+  color: black;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-weight: 700;
+  cursor: none !important;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+.invite-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.05) 0%, transparent 70%);
+  transform: scale(0);
+  transition: transform 0.6s ease;
+  pointer-events: none;
+}
+
+.invite-btn:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+}
+
+.invite-btn:hover::after {
+  transform: scale(1);
+}
+
+.invite-btn:active {
+  transform: translateY(0);
+}

@@ -1,0 +1,11 @@
+/* Layout specific styles used in Layout.js */
+/* Usually these are global, but if we need specific component styles */
+.layout-header {
+    pointer-events: none;
+    /* Let clicks pass through around the navbar */
+}
+
+.layout-header>* {
+    pointer-events: auto;
+    /* Re-enable clicks on the actually navbar */
+}

@@ -1,0 +1,25 @@
+{
+  "name": "rez-bot-project",
+  "version": "1.0.0",
+  "description": "Rez Bot - Discord bot with web interface",
+  "scripts": {
+    "frontend-install": "cd frontend && npm install",
+    "frontend-start": "cd frontend && npm start",
+    "frontend-build": "cd frontend && npm run build",
+    "backend-start": "cd backend && python main.py",
+    "dev": "concurrently \"npm run frontend-start\" \"npm run backend-start\"",
+    "install-all": "npm run frontend-install && pip install -r backend/requirements.txt"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "react",
+    "web",
+    "dashboard"
+  ],
+  "author": "Snow099",
+  "license": "MIT"
+}

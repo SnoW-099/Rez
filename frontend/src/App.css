@@ -1,0 +1,481 @@
+@import url('https://fonts.googleapis.com/css2?family=MSGothic:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  /* Scrollbar for Webkit */
+  --scrollbar-width: 6px;
+  --scrollbar-track: #000000;
+  --scrollbar-thumb: #27272a;
+  --scrollbar-thumb-hover: #3f3f46;
+
+  /* Unified Dark Palette - Refined */
+  --bg-color: #000000;
+
+  /* Single cohesive dark grey for all containers */
+  --card-bg: #09090b;
+  --element-bg: #09090b;
+  /* Uniform button/card backgrounds */
+  --element-hover: #18181b;
+  /* Hover state */
+
+  --text-primary: #ededed;
+  /* Slightly softer white */
+  --text-secondary: #71717a;
+  /* Cool grey */
+
+  --border-color: #1f1f22;
+  --accent-color: #5865F2;
+
+  /* Consistent Shapes */
+  --card-radius: 16px;
+  --btn-radius: 8px;
+
+  --max-width: 600px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Custom Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+/* Scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* Cursor Hide */
+body {
+  cursor: none;
+  /* Hide default cursor */
+  margin: 0;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a,
+button,
+input,
+textarea,
+select,
+.pointer {
+  cursor: none !important;
+  /* Keep hidden even on interactables */
+}
+
+/* Background Effects */
+.layout-container {
+  padding-bottom: 50px;
+  min-height: 100vh;
+}
+
+/* Navigation */
+.layout-header {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.layout-content {
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 0 20px 40px;
+}
+
+.content-wrapper {
+  width: 100%;
+}
+
+/* Bento/Profile Grid - Single Column Force for Mobile/Profile feel */
+.bento-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Global Card Style */
+.glass-card {
+  background: rgba(9, 9, 11, 0.8);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: #3f3f46;
+  background: rgba(15, 15, 18, 0.9);
+}
+
+/* Typography Defaults */
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 700;
+}
+
+.text-gradient {
+  color: var(--text-primary);
+}
+
+/* Sand/Dissolve Text Animation */
+.sand-text {
+  position: relative;
+  color: transparent;
+  /* Text itself is transparent */
+  background: #fff;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: sandDissolve 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  /* Faster duration */
+  filter: blur(5px);
+  opacity: 0;
+}
+
+@keyframes sandDissolve {
+  0% {
+    filter: blur(8px);
+    opacity: 0;
+    transform: scale(1.1) translateY(10px);
+    letter-spacing: 10px;
+    /* Scattered grains */
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    filter: blur(0px);
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    letter-spacing: normal;
+    color: white;
+    /* Final solid state */
+  }
+}
+
+/* Global Button Styles */
+.secondary-btn {
+  background: var(--element-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 12px;
+  border-radius: var(--btn-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+.secondary-btn:hover {
+  background: #27272a;
+  border-color: #52525b;
+}
+
+/* Utility Animations */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* System Heartbeat (Pulsing Status) */
+.status-dot-pulse {
+  position: relative;
+  box-shadow: 0 0 0 0 rgba(35, 165, 89, 0.4);
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(35, 165, 89, 0.7);
+  }
+
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(35, 165, 89, 0);
+  }
+
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(35, 165, 89, 0);
+  }
+}
+
+/* Shimmer Loading Effect */
+@keyframes shimmer {
+  0% {
+    left: -150%;
+  }
+
+  50% {
+    left: 150%;
+  }
+
+  100% {
+    left: 150%;
+  }
+}
+
+.shimmer-sweep {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.05),
+      transparent);
+  animation: shimmer 2.5s infinite;
+}
+
+.skeleton-card {
+  height: 120px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--border-color);
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  color: var(--text-secondary);
+}
+
+/* Custom Toast Style - Liquid Black */
+.toast-container {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.liquid-toast {
+  background: rgba(9, 9, 11, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateY(20px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  pointer-events: auto;
+}
+
+.liquid-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast-icon {
+  color: #5865F2;
+  /* Blurple */
+}
+
+/* ============== MOBILE RESPONSIVE ============== */
+
+/* Tablets and smaller */
+@media (max-width: 768px) {
+  :root {
+    --max-width: 100%;
+  }
+
+  body {
+    cursor: auto;
+    /* Show normal cursor on mobile */
+  }
+
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  .pointer {
+    cursor: auto !important;
+  }
+
+  .layout-header {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+
+  .layout-content {
+    padding: 0 16px 30px;
+  }
+
+  .glass-card {
+    padding: 20px;
+    border-radius: 12px;
+  }
+
+  .glass-card h1 {
+    font-size: 1.8rem !important;
+  }
+
+  /* Hero section */
+  .hero-title {
+    font-size: 2.5rem !important;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem !important;
+  }
+
+  /* Stats grid */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px;
+  }
+
+  /* Toast position */
+  .toast-container {
+    bottom: 20px;
+    right: 16px;
+    left: 16px;
+  }
+
+  .liquid-toast {
+    font-size: 0.85rem;
+    padding: 10px 16px;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .layout-content {
+    padding: 0 12px 20px;
+  }
+
+  .glass-card {
+    padding: 16px;
+  }
+
+  .glass-card h1 {
+    font-size: 1.5rem !important;
+  }
+
+  .hero-title {
+    font-size: 2rem !important;
+  }
+
+  /* Bento grid adjustments */
+  .bento-grid {
+    gap: 12px;
+  }
+
+  /* Stats - 2 columns on mobile */
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .stat-item {
+    padding: 12px !important;
+  }
+
+  .stat-value {
+    font-size: 1.5rem !important;
+  }
+
+  /* Buttons */
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+
+  /* Commands list */
+  .command-card code {
+    font-size: 0.85rem;
+  }
+
+  /* Footer/Add to server button spacing */
+  .invite-section {
+    padding: 20px 16px;
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+  .layout-content {
+    padding: 0 8px 16px;
+  }
+
+  .glass-card {
+    padding: 14px;
+  }
+
+  .hero-title {
+    font-size: 1.75rem !important;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
