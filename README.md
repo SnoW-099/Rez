@@ -1,37 +1,52 @@
-# ⚙️ Rez | Backend Engine
-**The core infrastructure powering the Rez ecosystem.**
+# Rez | Backend Engine
 
-This repository contains the logic, database management, and API bridge that sustain the security and economy modules of Rez.
+## System Overview
+The Rez Backend serves as the primary infrastructure for the Rez ecosystem, managing data persistence, security protocols, and cross-platform communication. It acts as a centralized bridge between the Discord interface and external web services.
 
----
+## Core Architecture
+The system utilizes a dual-component architecture to ensure high availability and separation of concerns:
 
-## 🏗️ System Architecture
-The backend is divided into two main components:
-1. **The Bot (Discord Core):** Handles events, commands, and real-time interaction using `discord.py` / `disnake`.
-2. **The API Bridge (Flask):** A lightweight REST API that serves data to the Frontend dashboard.
+* **Service Layer (Discord Core):** An asynchronous event-driven engine built on `discord.py`/`disnake` for real-time interaction management.
+* **API Gateway (Flask):** A RESTful API interface designed for low-latency data delivery to frontend consumers.
 
+## Technical Stack
+* **Runtime:** Python 3.10+
+* **API Framework:** Flask
+* **Interface Library:** Discord.py / Disnake
+* **Database:** Supabase / MongoDB (Hybrid Persistence)
+* **Process Management:** PM2 / Docker Containerization
 
+## API Reference
 
-## 🛠️ Technical Stack
-* **Language:** Python 3.10+
-* **Framework:** Flask (API)
-* **Library:** Discord.py / Disnake (Bot)
-* **Database:** Supabase / MongoDB (Persistence)
-* **Process Manager:** PM2 / Docker
-
-## 📡 API Endpoints (Flask)
-| Endpoint | Method | Description |
+### System Health & Metrics
+| Endpoint | Method | Functional Description |
 | :--- | :--- | :--- |
-| `/api/v1/status` | `GET` | Returns system health and latency. |
-| `/api/v1/stats` | `GET` | Fetches global server and user counts. |
-| `/api/v1/user/<id>`| `GET` | Returns specific economy and security data for a user. |
+| `/api/v1/status` | `GET` | Returns system telemetry and latency metrics. |
+| `/api/v1/stats` | `GET` | Retrieves aggregate server and user analytics. |
+| `/api/v1/user/<id>`| `GET` | Fetches granular economy and security profiles. |
 
-## 🛡️ Security & Performance
-* **Asynchronous Execution:** Built with `asyncio` to handle multiple requests without blocking.
-* **CORS Enabled:** Configured for secure communication with the Netlify frontend.
-* **Environment Variables:** Critical tokens and DB strings are managed via `.env` files.
+## Engineering Standards
 
-## 🚀 Installation & Setup
-1. **Clone the backend:**
-   ```bash
-   git clone [https://github.com/SnoW-099/Rez-Backend](https://github.com/SnoW-099/Rez-Backend)
+### Concurrency
+The engine leverages `asyncio` for non-blocking I/O operations, ensuring high throughput during peak load.
+
+### Security Implementation
+* **Cross-Origin Resource Sharing (CORS):** Strict policy configuration for authorized frontend domains.
+* **Environment Abstraction:** Sensitive credentials and connection strings are managed via `.env` environments (excluded from VCS).
+
+## Installation & Deployment
+
+### Local Environment Setup
+```bash
+# Clone the repository
+git clone [https://github.com/SnoW-099/Rez-Backend](https://github.com/SnoW-099/Rez-Backend)
+
+# Navigate to project root
+cd Rez-Backend
+
+# Initialize virtual environment
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+
+# Install dependencies
+pip install -r requirements.txt
